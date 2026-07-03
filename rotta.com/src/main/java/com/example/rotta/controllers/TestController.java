@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping("/")
-    public String index(){
+    public String index() {
         return "Seja bem vindo ao sistemaaaaas Spring!!!";
     }
-
 
 }

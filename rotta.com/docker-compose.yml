@@ -4,6 +4,7 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: appdb
@@ -11,6 +12,11 @@ services:
       MYSQL_PASSWORD: apppass
     ports:
       - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   app:
     image: maven:3.9-eclipse-temurin-21
@@ -28,11 +34,13 @@ services:
       SPRING_DATASOURCE_PASSWORD: apppass
       SPRING_PROFILES_ACTIVE: dev
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
+    restart: unless-stopped
     ports:
       - "8081:80"
     environment:
