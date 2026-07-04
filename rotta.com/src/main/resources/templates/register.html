@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Usuário</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+
+        <h2>Registrar Usuário</h2>
+
+        <!-- Mensagem de sucesso -->
+        <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}">
+        </div>
+
+        <!-- Mensagem de erro -->
+        <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}">
+        </div>
+
+        <form th:action="@{/auth/register}" method="post">
+
+            <!-- CSRF (ESSENCIAL com Spring Security) -->
+            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Nome de Usuário</label>
+                <input type="text" id="login" name="login" class="form-control" placeholder="Digite o nome de usuário"
+                    required />
+            </div>
+
+            <!-- Senha -->
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Digite a senha"
+                    required />
+            </div>
+
+            <div class="form-group">
+                <label for="role">Perfil</label>
+                <select id="role" name="role" class="form-control" required>
+                    <option value="">Selecione um perfil</option>
+                    <option value="USER">Usuário</option>
+                    <option value="ADMIN">Administrador</option>
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">
+                Registrar
+            </button>
+
+            <a th:href="@{/login}" class="btn btn-secondary">
+                Voltar
+            </a>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>
