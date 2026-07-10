@@ -24,6 +24,9 @@ import com.example.rotta.models.User;
 import com.example.rotta.repositories.UserRepository;
 import com.example.rotta.services.UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("auth")
 public class AuthController {
@@ -58,20 +61,36 @@ public class AuthController {
         return mv;
     }
 
+    @GetMapping("/login")
+    public ModelAndView loginGet() {
+        ModelAndView mv = new ModelAndView("login");
+        return mv;
+    }
+
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequestDTO loginRequest) throws Exception {
+    public ModelAndView loginPost(@RequestParam String login, @RequestParam String password, HttpServletResponse response) throws Exception {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.login(), loginRequest.password()));
+                    new UsernamePasswordAuthenticationToken(login, password));
         } catch (Exception ex) {
             throw new Exception("Credentials Invalid");
         }
 
         User user = new User();
-        user.setLogin(loginRequest.login());
-        user.setPassword(loginRequest.password());
+        user.setLogin(login);
+        user.setPassword(password);
 
-        return tokenConfig.generateToken(user);
+        String token =  tokenConfig.generateToken(user);
+
+        Cookie cookie = new Cookie("JWT", token);
+        
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 60);
+        response.addCookie(cookie);
+        
+        ModelAndView mv = new ModelAndView("dashboard"); 
+        return mv;
     }
 
 }

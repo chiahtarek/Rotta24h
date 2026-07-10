@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h2>Efetuar Login</h2>
+
+    <!-- Mensagem de sucesso -->
+    <div class="alert alert-success"
+         th:if="${successMessage}"
+         th:text="${successMessage}">
+    </div>
+
+    <!-- Mensagem de erro -->
+    <div class="alert alert-danger"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+    <form th:action="@{/auth/login}" method="post">
+
+        <!-- CSRF -->
+        <input type="hidden"
+               th:if="${_csrf != null}"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
+
+        <!-- Login -->
+        <div class="form-group">
+            <label for="login">Login</label>
+            <input type="text"
+                   id="login"
+                   name="login"
+                   class="form-control"
+                   placeholder="Digite seu login"
+                   required />
+        </div>
+
+        <!-- Senha -->
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password"
+                   id="password"
+                   name="password"
+                   class="form-control"
+                   placeholder="Digite sua senha"
+                   required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Entrar
+        </button>
+
+        <a th:href="@{/auth/register}" class="btn btn-secondary">
+            Criar conta
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>
+```
