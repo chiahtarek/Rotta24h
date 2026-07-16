@@ -11,6 +11,7 @@ import com.example.rotta.models.User;
 import com.example.rotta.repositories.MechanicRepository;
 import com.example.rotta.repositories.RiderRepository;
 import com.example.rotta.repositories.UserRepository;
+import com.example.rotta.roles.UserRole;
 
 @Service
 public class UserService {
@@ -36,7 +37,9 @@ public class UserService {
         user.setFullName(dto.fullName());
         userRepository.save(user);
 
-        if(dto.role().equals("rider")){
+        System.out.println(dto.role());
+
+        if(dto.role().equals(UserRole.RIDER)){
             Rider rider = new Rider(); 
             rider.setUser(user);
             rider.setDriverLicense(dto.driverLicense());
