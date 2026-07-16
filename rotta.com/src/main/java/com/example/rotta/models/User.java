@@ -24,9 +24,13 @@ public class User implements UserDetails {
     @Column(name = "login", nullable = false)
     private String login;
 
+    @Column(name = "fullname", nullable = false)
+    private String fullName;
+
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = true)
     private UserRole role;
 
@@ -40,6 +44,14 @@ public class User implements UserDetails {
 
     public Integer getId() {
         return id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public void setId(Integer id) {

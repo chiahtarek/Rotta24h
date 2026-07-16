@@ -2,7 +2,8 @@ package com.example.rotta.roles;
 
 public enum UserRole {
     ADMIN("admin"),
-    USER("user");
+    MECHANIC("MECHANIC"), 
+    RIDER("RIDER"); 
 
     private String role;
 

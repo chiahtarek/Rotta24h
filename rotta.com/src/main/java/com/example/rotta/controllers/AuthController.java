@@ -51,11 +51,7 @@ public class AuthController {
     @PostMapping("/register")
     public ModelAndView registerPost(@ModelAttribute RegisterRequestDTO dto) {
         ModelAndView mv = new ModelAndView("register");
-        User user = new User();
-        user.setLogin(dto.login());
-        user.setPassword(passwordEncoder.encode(dto.password()));
-        user.setRole(dto.role());
-        userService.register(user);
+        userService.register(dto);
 
         mv.addObject("successMessage", "Registrado com Sucesso ! ");
         return mv;
@@ -68,7 +64,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ModelAndView loginPost(@RequestParam String login, @RequestParam String password, HttpServletResponse response) throws Exception {
+    public ModelAndView loginPost(@RequestParam String login, @RequestParam String password,
+            HttpServletResponse response) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login, password));
@@ -80,16 +77,16 @@ public class AuthController {
         user.setLogin(login);
         user.setPassword(password);
 
-        String token =  tokenConfig.generateToken(user);
+        String token = tokenConfig.generateToken(user);
 
         Cookie cookie = new Cookie("JWT", token);
-        
+
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60);
         response.addCookie(cookie);
-        
-        ModelAndView mv = new ModelAndView("dashboard"); 
+
+        ModelAndView mv = new ModelAndView("dashboard");
         return mv;
     }
 

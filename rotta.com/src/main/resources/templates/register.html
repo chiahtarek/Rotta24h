@@ -3,9 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Registrar Usuário</title>
+    <title>Register User</title>
 
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 
@@ -13,56 +12,172 @@
 
     <div class="container mt-5">
 
-        <h2>Registrar Usuário</h2>
+        <h2>Register User</h2>
 
-        <!-- Mensagem de sucesso -->
+        <!-- Success Message -->
         <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}">
         </div>
 
-        <!-- Mensagem de erro -->
+        <!-- Error Message -->
         <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}">
         </div>
 
+
         <form th:action="@{/auth/register}" method="post">
 
-            <!-- CSRF (ESSENCIAL com Spring Security) -->
+            <!-- CSRF -->
             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-            <!-- Username -->
+
+            <!-- Login -->
             <div class="form-group">
-                <label for="username">Nome de Usuário</label>
-                <input type="text" id="login" name="login" class="form-control" placeholder="Digite o nome de usuário"
-                    required />
+                <label for="login">Username</label>
+                <input type="text" id="login" name="login" class="form-control" placeholder="Enter username" required>
             </div>
 
-            <!-- Senha -->
+
+            <!-- Full Name -->
             <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Digite a senha"
-                    required />
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Enter full name"
+                    required>
             </div>
 
+
+            <!-- Password -->
             <div class="form-group">
-                <label for="role">Perfil</label>
-                <select id="role" name="role" class="form-control" required>
-                    <option value="">Selecione um perfil</option>
-                    <option value="USER">Usuário</option>
-                    <option value="ADMIN">Administrador</option>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password"
+                    required>
+            </div>
+
+
+            <!-- Role -->
+            <div class="form-group">
+                <label for="role">Role</label>
+
+                <select id="role" name="role" class="form-control" required onchange="toggleFields()">
+
+                    <option value="">Select a role</option>
+
+                    <option value="0">Admin</option>
+                    <option value="RIDER">Rider</option>
+                    <option value="MECHANIC">Mechanic</option>
+
                 </select>
             </div>
 
 
+
+            <!-- Rider Information -->
+            <div id="riderFields" style="display:none;">
+
+                <hr>
+
+                <h4>Rider Information</h4>
+
+                <div class="form-group">
+
+                    <label for="driverLicense">
+                        Driver License
+                    </label>
+
+                    <input type="text" id="driverLicense" name="driverLicense" class="form-control"
+                        placeholder="Enter driver license">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Mechanic Information -->
+            <div id="mechanicFields" style="display:none;">
+
+                <hr>
+
+                <h4>Mechanic Information</h4>
+
+
+                <div class="form-group">
+
+                    <label for="workshopName">
+                        Workshop Name
+                    </label>
+
+                    <input type="text" id="workshopName" name="workshopName" class="form-control"
+                        placeholder="Enter workshop name">
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="specialty">
+                        Specialty
+                    </label>
+
+                    <input type="text" id="specialty" name="specialty" class="form-control"
+                        placeholder="Enter specialty">
+
+                </div>
+
+
+            </div>
+
+
+
             <button type="submit" class="btn btn-primary">
-                Registrar
+                Register
             </button>
 
+
             <a th:href="@{/login}" class="btn btn-secondary">
-                Voltar
+                Back
             </a>
+
 
         </form>
 
+
     </div>
+
+
+    <script>
+
+        function toggleFields() {
+
+            const role = document.getElementById("role").value;
+
+            const riderFields = document.getElementById("riderFields");
+            const mechanicFields = document.getElementById("mechanicFields");
+
+
+            riderFields.style.display = "none";
+            mechanicFields.style.display = "none";
+
+
+            if (role === "RIDER") {
+
+                riderFields.style.display = "block";
+
+            }
+
+
+            if (role === "MECHANIC") {
+
+                mechanicFields.style.display = "block";
+
+            }
+
+        }
+
+
+        window.onload = toggleFields;
+
+    </script>
+
 
 </body>
 
