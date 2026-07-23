@@ -1,5 +1,6 @@
 package com.example.rotta.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -30,6 +31,9 @@ public class Rider {
 
     @OneToMany(mappedBy = "rider")
     private List<Motorcycle> motorcycles;
+
+    @OneToMany(mappedBy = "rider")
+    private List<HelpRequest> helpRequests;
 
     public User getUser() {
         return user;

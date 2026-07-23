@@ -5,13 +5,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.rotta.dto.RegisterRequestDTO;
+import com.example.rotta.enums.UserRole;
 import com.example.rotta.models.Mechanic;
 import com.example.rotta.models.Rider;
 import com.example.rotta.models.User;
 import com.example.rotta.repositories.MechanicRepository;
 import com.example.rotta.repositories.RiderRepository;
 import com.example.rotta.repositories.UserRepository;
-import com.example.rotta.roles.UserRole;
 
 @Service
 public class UserService {

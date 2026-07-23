@@ -1,5 +1,6 @@
 package com.example.rotta.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.rotta.roles.UserRole;
+import com.example.rotta.enums.UserRole;
 
 import jakarta.persistence.*;
 
@@ -33,6 +34,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = true)
     private UserRole role;
+
 
     public User() {
     }

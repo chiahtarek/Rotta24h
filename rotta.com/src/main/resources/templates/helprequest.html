@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>RideAssist - Request Help</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            width: 400px;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            font-size: 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #d32f2f;
+            color: white;
+            transition: .3s;
+        }
+
+        button:hover {
+            background: #b71c1c;
+        }
+
+        #status {
+            margin-top: 20px;
+            color: #1976d2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}">
+    </div>
+
+    <div class="card">
+
+        <h1>Need Help?</h1>
+
+        <p>
+            Select the problem and press the button below to send your location.
+        </p>
+
+        <select id="problemType">
+            <option value="FLATTIRE">Flat Tire</option>
+            <option value="FUEL">Out of Fuel</option>
+            <option value="BATTERY">Battery Problem</option>
+            <option value="ENGINE">Engine Problem</option>
+            <option value="ACCIDENT">Accident</option>
+            <option value="OTHER">Other</option>
+        </select>
+
+        <button onclick="requestHelp()" type="button">
+            🚨 REQUEST HELP
+        </button>
+
+        <p id="status"></p>
+
+    </div>
+
+
+    <script>
+
+        function requestHelp() {
+
+            const status = document.getElementById("status");
+            const problemType = document.getElementById("problemType").value;
+
+            if (!navigator.geolocation) {
+                status.innerHTML = "Your browser doesn't support geolocation.";
+                return;
+            }
+
+            status.innerHTML = "Getting your location...";
+
+            navigator.geolocation.getCurrentPosition(
+
+                async (position) => {
+
+                    const data = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        problemType: problemType
+                    };
+
+
+                    try {
+
+                        const response = await fetch("/help/request", {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+
+                            body: JSON.stringify(data)
+
+                        });
+
+
+                        if (response.ok) {
+                            status.innerHTML = "✅ Help request sent successfully!";
+                        } else {
+                            status.innerHTML = "❌ Could not send help request.";
+                        }
+
+
+                    } catch (e) {
+
+                        status.innerHTML = "❌ Connection error.";
+
+                    }
+
+                },
+
+
+                () => {
+                    status.innerHTML = "Location permission denied.";
+                }
+
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

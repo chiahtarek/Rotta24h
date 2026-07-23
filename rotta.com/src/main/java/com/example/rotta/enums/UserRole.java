@@ -1,4 +1,4 @@
-package com.example.rotta.roles;
+package com.example.rotta.enums;
 
 public enum UserRole {
     ADMIN("admin"),
