@@ -38,6 +38,7 @@ public class HelpRequestService {
         helpRequest.setLatitude(dto.latitude());
         helpRequest.setLongitude(dto.longitude());
         helpRequest.setProblemType(dto.problemType());
+        helpRequest.setDescription(dto.description());
 
         return helpRequestRepository.save(helpRequest);
 

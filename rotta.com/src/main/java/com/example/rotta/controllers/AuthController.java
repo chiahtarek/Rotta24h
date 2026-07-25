@@ -44,13 +44,13 @@ public class AuthController {
 
     @GetMapping("/register")
     public ModelAndView registerGet() {
-        ModelAndView mv = new ModelAndView("register");
+        ModelAndView mv = new ModelAndView("auth/register");
         return mv;
     }
 
     @PostMapping("/register")
     public ModelAndView registerPost(@ModelAttribute RegisterRequestDTO dto) {
-        ModelAndView mv = new ModelAndView("register");
+        ModelAndView mv = new ModelAndView("auth/register");
         userService.register(dto);
 
         mv.addObject("successMessage", "Registrado com Sucesso ! ");
@@ -59,7 +59,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public ModelAndView loginGet() {
-        ModelAndView mv = new ModelAndView("login");
+        ModelAndView mv = new ModelAndView("auth/login");
         return mv;
     }
 

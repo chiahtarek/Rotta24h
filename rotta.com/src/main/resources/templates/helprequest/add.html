@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
@@ -40,13 +41,18 @@
             margin-bottom: 30px;
         }
 
-        select {
+        select,
+        input {
             width: 100%;
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 8px;
             border: 1px solid #ccc;
             font-size: 16px;
+        }
+
+        #otherDescription {
+            display: none;
         }
 
         button {
@@ -85,7 +91,7 @@
             Select the problem and press the button below to send your location.
         </p>
 
-        <select id="problemType">
+        <select id="problemType" onchange="showOtherDescription()">
             <option value="FLATTIRE">Flat Tire</option>
             <option value="FUEL">Out of Fuel</option>
             <option value="BATTERY">Battery Problem</option>
@@ -93,6 +99,12 @@
             <option value="ACCIDENT">Accident</option>
             <option value="OTHER">Other</option>
         </select>
+
+        <input 
+            type="text" 
+            id="description" 
+            name="description" 
+            placeholder="Describe the problem">
 
         <button onclick="requestHelp()" type="button">
             🚨 REQUEST HELP
@@ -105,10 +117,32 @@
 
     <script>
 
+        function showOtherDescription() {
+
+            const problemType = document.getElementById("problemType").value;
+            const input = document.getElementById("description");
+
+            if (problemType === "OTHER") {
+                input.style.display = "block";
+            } else {
+                input.style.display = "none";
+                input.value = "";
+            }
+        }
+
+
         function requestHelp() {
 
             const status = document.getElementById("status");
             const problemType = document.getElementById("problemType").value;
+            const description = document.getElementById("description").value;
+
+
+            if (problemType === "OTHER" && description.trim() === "") {
+                status.innerHTML = "Please describe the problem.";
+                return;
+            }
+
 
             if (!navigator.geolocation) {
                 status.innerHTML = "Your browser doesn't support geolocation.";
@@ -117,6 +151,7 @@
 
             status.innerHTML = "Getting your location...";
 
+
             navigator.geolocation.getCurrentPosition(
 
                 async (position) => {
@@ -124,7 +159,8 @@
                     const data = {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
-                        problemType: problemType
+                        problemType: problemType,
+                        description: description
                     };
 
 
@@ -172,3 +208,4 @@
 </body>
 
 </html>
+

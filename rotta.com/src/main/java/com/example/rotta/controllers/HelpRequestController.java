@@ -22,13 +22,13 @@ public class HelpRequestController {
     
     @GetMapping("/request")
     public ModelAndView helpGet(){
-        ModelAndView mv = new ModelAndView("helprequest"); 
+        ModelAndView mv = new ModelAndView("helprequest/add"); 
         return mv;
     }
     
     @PostMapping("/request")
     public ModelAndView helpPost(@RequestBody HelpRequestDTO dto ){
-        ModelAndView mv = new ModelAndView("helprequest");
+        ModelAndView mv = new ModelAndView("helprequest/add");
         helpRequestService.save(dto); 
         mv.addObject("successMessage", "Help Request with Success");
         return mv;

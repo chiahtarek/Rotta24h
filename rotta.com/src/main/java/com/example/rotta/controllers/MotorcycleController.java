@@ -20,15 +20,20 @@ public class MotorcycleController {
 
     @GetMapping("/add")
     public ModelAndView addGet(){
-        ModelAndView mv = new ModelAndView("add-motorcycle"); 
+        ModelAndView mv = new ModelAndView("motorcycle/add"); 
         return mv; 
     }
 
     @PostMapping("/add")
     public ModelAndView addPost(@ModelAttribute Motorcycle motorcycle){
-        ModelAndView mv = new ModelAndView("add-motorcycle"); 
+        ModelAndView mv = new ModelAndView("motorcycle/add"); 
         motorcycleService.save(motorcycle); 
         mv.addObject("successMessage", "Motorcycle added with Success"); 
         return mv;
     }
+
+        // @GetMapping("/list")
+        // public ModelAndView list(){
+        //     ModelAndView mv = new ModelAndView("")
+        // }
 }

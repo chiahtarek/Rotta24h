@@ -46,6 +46,9 @@ public class HelpRequest {
     @Column(name = "problemtype", nullable = true)
     private ProblemType problemType;
 
+    @Column(name = "description")
+    private String description; 
+
     public HelpRequest() {
     }
 
@@ -103,6 +106,14 @@ public class HelpRequest {
 
     public void setProblemType(ProblemType problemType) {
         this.problemType = problemType;
+    }
+
+    public String getDescription(){
+        return description; 
+    }
+
+    public void setDescription(String description){
+        this.description = description;
     }
 
 }
