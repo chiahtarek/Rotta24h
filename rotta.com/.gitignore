@@ -15,7 +15,7 @@ target/
 
 # Environment variables / secrets
 .env
-
+**/.env
 
 ### IntelliJ IDEA ###
 .idea
