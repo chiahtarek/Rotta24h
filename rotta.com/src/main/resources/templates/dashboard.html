@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
@@ -6,11 +5,9 @@
     <meta charset="UTF-8">
     <title>Dashboard - Moto App</title>
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
     <style>
-
         body {
             background-color: #f5f6fa;
         }
@@ -46,7 +43,7 @@
 
         .card-dashboard:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
         }
 
         .icon {
@@ -62,7 +59,6 @@
             background-color: #e64a19;
             color: white;
         }
-
     </style>
 
 </head>
@@ -71,340 +67,326 @@
 <body>
 
 
-<!-- NAVBAR -->
+    <!-- NAVBAR -->
 
-<nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg">
 
-    <a class="navbar-brand" th:href="@{/dashboard}">
-        🏍 Moto App
-    </a>
-
-
-    <button class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#menu">
-
-        <span class="navbar-toggler-icon"></span>
-
-    </button>
+        <a class="navbar-brand" th:href="@{/dashboard}">
+            🏍 Moto App
+        </a>
 
 
-    <div class="collapse navbar-collapse" id="menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
 
-        <ul class="navbar-nav ml-auto">
+            <span class="navbar-toggler-icon"></span>
 
-            <li class="nav-item dropdown">
-
-                <a class="nav-link dropdown-toggle profile"
-                   href="#"
-                   data-toggle="dropdown">
-
-                    👤
-                    <span th:text="${username}">
-                        Usuário
-                    </span>
-
-                </a>
+        </button>
 
 
-                <div class="dropdown-menu dropdown-menu-right">
+        <div class="collapse navbar-collapse" id="menu">
 
-                    <a class="dropdown-item"
-                       th:href="@{/perfil}">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle profile" href="#" data-toggle="dropdown">
+
+                        👤
+                        <span th:text="${username}">
+                            Usuário
+                        </span>
+
+                    </a>
+
+
+                    <div class="dropdown-menu dropdown-menu-right">
+
+                        <a class="dropdown-item" th:href="@{/perfil}">
+                            Meu Perfil
+                        </a>
+
+
+                        <a class="dropdown-item" th:href="@{/configuracoes}">
+                            Configurações
+                        </a>
+
+
+                        <div class="dropdown-divider"></div>
+
+
+                        <a class="dropdown-item" th:href="@{/logout}">
+                            Sair
+                        </a>
+
+                    </div>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+    </nav>
+
+
+
+    <div class="container">
+
+
+        <!-- BANNER -->
+
+
+        <div class="banner">
+
+
+            <h2>
+                Olá,
+                <span th:text="${username}">
+                    Motociclista
+                </span> 🏍
+            </h2>
+
+
+            <p>
+                Gerencie suas motos, acompanhe chamados
+                e tenha tudo em um só lugar.
+            </p>
+
+
+        </div>
+
+
+
+
+        <!-- CARDS -->
+
+
+        <div class="row mt-4">
+
+
+
+            <div class="col-md-4 mb-4">
+
+
+                <div class="card card-dashboard shadow-sm p-4 text-center">
+
+
+                    <div class="icon">
+                        🏍
+                    </div>
+
+
+                    <h4>
+                        Minhas Motos
+                    </h4>
+
+
+                    <p>
+                        Consulte suas motos cadastradas.
+                    </p>
+
+
+                    <a class="btn btn-moto" th:href="@{/motorcycle/add}">
+                        Acessar
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <div class="col-md-4 mb-4">
+
+
+                <div class="card card-dashboard shadow-sm p-4 text-center">
+
+
+                    <div class="icon">
+                        ➕
+                    </div>
+
+
+                    <h4>
+                        Cadastrar Moto
+                    </h4>
+
+
+                    <p>
+                        Adicione uma nova moto.
+                    </p>
+
+
+                    <a class="btn btn-moto" th:href="@{/motorcycle/add}">
+                        Cadastrar
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+            <div class="col-md-4 mb-4">
+
+
+                <div class="card card-dashboard shadow-sm p-4 text-center">
+
+
+                    <div class="icon">
+                        🛠
+                    </div>
+
+
+                    <h4>
+                        Abrir Chamado
+                    </h4>
+
+
+                    <p>
+                        Solicite suporte ou manutenção.
+                    </p>
+
+
+                    <a class="btn btn-moto" th:href="@{/help/request}">
+                        Abrir
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+            <div class="col-md-4 mb-4">
+
+
+                <div class="card card-dashboard shadow-sm p-4 text-center">
+
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+
+                    <h4>
+                        Meus Chamados
+                    </h4>
+
+
+                    <p>
+                        Acompanhe seus atendimentos.
+                    </p>
+
+
+                    <a class="btn btn-moto" th:href="@{/chamados}">
+                        Visualizar
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+
+            <div class="col-md-4 mb-4">
+
+
+                <div class="card card-dashboard shadow-sm p-4 text-center">
+
+
+                    <div class="icon">
+                        👤
+                    </div>
+
+
+                    <h4>
                         Meu Perfil
+                    </h4>
+
+
+                    <p>
+                        Atualize seus dados pessoais.
+                    </p>
+
+
+                    <a class="btn btn-moto" th:href="@{/perfil}">
+                        Perfil
                     </a>
 
 
-                    <a class="dropdown-item"
-                       th:href="@{/configuracoes}">
+                </div>
+
+
+            </div>
+
+
+
+
+            <div class="col-md-4 mb-4">
+
+
+                <div class="card card-dashboard shadow-sm p-4 text-center">
+
+
+                    <div class="icon">
+                        ⚙
+                    </div>
+
+
+                    <h4>
                         Configurações
+                    </h4>
+
+
+                    <p>
+                        Preferências do aplicativo.
+                    </p>
+
+
+                    <a class="btn btn-moto" th:href="@{/configuracoes}">
+                        Configurar
                     </a>
 
 
-                    <div class="dropdown-divider"></div>
-
-
-                    <a class="dropdown-item"
-                       th:href="@{/logout}">
-                        Sair
-                    </a>
-
                 </div>
 
-            </li>
 
-        </ul>
-
-    </div>
-
-
-</nav>
+            </div>
 
 
 
-<div class="container">
-
-
-    <!-- BANNER -->
-
-
-    <div class="banner">
-
-
-        <h2>
-            Olá,
-            <span th:text="${username}">
-                Motociclista
-            </span> 🏍
-        </h2>
-
-
-        <p>
-            Gerencie suas motos, acompanhe chamados
-            e tenha tudo em um só lugar.
-        </p>
+        </div>
 
 
     </div>
 
 
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
-    <!-- CARDS -->
-
-
-    <div class="row mt-4">
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card card-dashboard shadow-sm p-4 text-center">
-
-
-                <div class="icon">
-                    🏍
-                </div>
-
-
-                <h4>
-                    Minhas Motos
-                </h4>
-
-
-                <p>
-                    Consulte suas motos cadastradas.
-                </p>
-
-
-                <a class="btn btn-moto"
-                   th:href="@{/motorcycle/add}">
-                    Acessar
-                </a>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card card-dashboard shadow-sm p-4 text-center">
-
-
-                <div class="icon">
-                    ➕
-                </div>
-
-
-                <h4>
-                    Cadastrar Moto
-                </h4>
-
-
-                <p>
-                    Adicione uma nova moto.
-                </p>
-
-
-                <a class="btn btn-moto"
-                   th:href="@{/motorcycle/add}">
-                    Cadastrar
-                </a>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card card-dashboard shadow-sm p-4 text-center">
-
-
-                <div class="icon">
-                    🛠
-                </div>
-
-
-                <h4>
-                    Abrir Chamado
-                </h4>
-
-
-                <p>
-                    Solicite suporte ou manutenção.
-                </p>
-
-
-                <a class="btn btn-moto"
-                   th:href="@{/chamados/novo}">
-                    Abrir
-                </a>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card card-dashboard shadow-sm p-4 text-center">
-
-
-                <div class="icon">
-                    📋
-                </div>
-
-
-                <h4>
-                    Meus Chamados
-                </h4>
-
-
-                <p>
-                    Acompanhe seus atendimentos.
-                </p>
-
-
-                <a class="btn btn-moto"
-                   th:href="@{/chamados}">
-                    Visualizar
-                </a>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card card-dashboard shadow-sm p-4 text-center">
-
-
-                <div class="icon">
-                    👤
-                </div>
-
-
-                <h4>
-                    Meu Perfil
-                </h4>
-
-
-                <p>
-                    Atualize seus dados pessoais.
-                </p>
-
-
-                <a class="btn btn-moto"
-                   th:href="@{/perfil}">
-                    Perfil
-                </a>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-        <div class="col-md-4 mb-4">
-
-
-            <div class="card card-dashboard shadow-sm p-4 text-center">
-
-
-                <div class="icon">
-                    ⚙
-                </div>
-
-
-                <h4>
-                    Configurações
-                </h4>
-
-
-                <p>
-                    Preferências do aplicativo.
-                </p>
-
-
-                <a class="btn btn-moto"
-                   th:href="@{/configuracoes}">
-                    Configurar
-                </a>
-
-
-            </div>
-
-
-        </div>
-
-
-
-    </div>
-
-
-</div>
-
-
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <div th:replace="~{fragments/scripts :: location-tracker}"></div>
 
 
 </body>

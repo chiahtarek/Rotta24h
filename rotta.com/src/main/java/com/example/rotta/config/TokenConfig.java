@@ -7,10 +7,12 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.example.rotta.models.User;
+import com.example.rotta.repositories.UserRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,6 +20,9 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class TokenConfig {
+
+    @Autowired
+    private UserRepository userRepository; 
 
     private static final String SECRET = "01234567890123456789012345678901";
 
@@ -66,5 +71,11 @@ public class TokenConfig {
         String username = extractUsername(token);
 
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    public Integer extractUserIdByLogin(String login){
+        String userName = extractUsername(login); 
+        User user = userRepository.findByLogin(userName).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return user.getId(); 
     }
 }

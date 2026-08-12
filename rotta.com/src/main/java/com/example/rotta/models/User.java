@@ -1,5 +1,6 @@
 package com.example.rotta.models;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +35,19 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = true)
     private UserRole role;
+
+    @Column(name = "latitude", nullable = true)
+    private Double latitude;
+
+    @Column(name = "longitude", nullable = true)
+    private Double longitude;
+
+    @Column(name = "locatioupdatedat", nullable = true)
+    private Instant locationUpdatedAt;
+
+    @Column(name = "online", nullable = true)
+    private boolean online;
+    
 
 
     public User() {

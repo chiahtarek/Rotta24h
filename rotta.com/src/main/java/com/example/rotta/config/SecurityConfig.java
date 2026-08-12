@@ -30,6 +30,7 @@ public class SecurityConfig {
                         authorize -> authorize
                                 .requestMatchers("/auth/register").permitAll()
                                 .requestMatchers("/auth/login").permitAll()
+                                .requestMatchers("/ws/**").permitAll()
                                 .anyRequest().authenticated())
                                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
