@@ -21,12 +21,12 @@ services:
   app:
     image: maven:3.9-eclipse-temurin-21
     container_name: app
+    restart: unless-stopped
     working_dir: /app
     volumes:
       - ./:/app
       - ${USERPROFILE}/.m2:/root/.m2
-      - ./src/main/resources/templates:/app/target/classes/templates
-    command: mvn spring-boot:run
+    command: mvn clean spring-boot:run
     ports:
       - "8080:8080"
     environment:
@@ -34,6 +34,7 @@ services:
       SPRING_DATASOURCE_USERNAME: appuser
       SPRING_DATASOURCE_PASSWORD: apppass
       SPRING_PROFILES_ACTIVE: dev
+      SPRING_DEVTOOLS_RESTART_ENABLED: "false" 
     depends_on:
       mysql:
         condition: service_healthy

@@ -26,8 +26,7 @@ public class LocationController {
     @MessageMapping("/location.update")
     @Transactional
     public void updateLocation(@Payload LocationDTO dto, Principal principal) {
-        String username = principal.getName();
-        User swapUser = userRepository.findByLogin(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        userRepository.updateLocation(swapUser.getId().longValue(), dto.latitude(), dto.longitude(), Instant.now());
+        Integer userId = Integer.valueOf(principal.getName()); 
+        userRepository.updateLocation(userId, dto.latitude(), dto.longitude(), Instant.now());
     }
 }

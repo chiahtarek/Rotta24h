@@ -20,11 +20,12 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class AuthHandshakeInterceptor implements HandshakeInterceptor {
-     
+
     @Autowired
     private final TokenConfig tokenConfig; // sua classe atual de validação de token
 
-    @Autowired UserRepository userRepository; 
+    @Autowired
+    UserRepository userRepository;
 
     public AuthHandshakeInterceptor(TokenConfig tokenConfig) {
         this.tokenConfig = tokenConfig;
@@ -32,19 +33,31 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                                    WebSocketHandler wsHandler, Map<String, Object> attributes) {
+            WebSocketHandler wsHandler, Map<String, Object> attributes) {
+
+        System.out.println("================================");
+        System.out.println(">>> HANDSHAKE WS");
+        System.out.println(">>> URI: " + request.getURI());
 
         if (request instanceof ServletServerHttpRequest servletRequest) {
             HttpServletRequest httpRequest = servletRequest.getServletRequest();
             Cookie[] cookies = httpRequest.getCookies();
+
+            System.out.println(
+                    ">>> COOKIES: " +
+                            (cookies == null ? "NULL" : cookies.length));
 
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
                     if ("JWT".equals(cookie.getName())) {
                         String token = cookie.getValue();
                         try {
-                            String userLogin = tokenConfig.extractUsername(token); // adapte ao seu método 
-                            attributes.put("username",userLogin);
+                            String userLogin = tokenConfig.extractUsername(token);
+                            User user = userRepository.findByLogin(userLogin).orElse(null);
+                            if (user == null) {
+                                return false;
+                            }
+                            attributes.put("userId", user.getId());
                             return true;
                         } catch (Exception e) {
                             return false; // token inválido -> recusa handshake
@@ -58,6 +71,6 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
 
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                                WebSocketHandler wsHandler, Exception exception) {
+            WebSocketHandler wsHandler, Exception exception) {
     }
 }

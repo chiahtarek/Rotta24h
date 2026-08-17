@@ -25,13 +25,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         this.authChannelInterceptor = authChannelInterceptor;
     }
 
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")
-                .addInterceptors(authHandshakeInterceptor)
-                .setAllowedOriginPatterns("*")
-                .withSockJS();
-    }
+        @Override
+        public void registerStompEndpoints(StompEndpointRegistry registry) {
+            registry.addEndpoint("/ws")
+                    .addInterceptors(authHandshakeInterceptor)
+                    .setAllowedOriginPatterns("*")
+                    .withSockJS();
+        }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {

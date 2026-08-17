@@ -1,5 +1,7 @@
 package com.example.rotta.websocket.auth;
 
+import java.util.Map;
+
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -21,14 +23,16 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
         if (accessor != null &&
                 StompCommand.CONNECT.equals(accessor.getCommand())) {
 
-            Long userId = (Long) accessor
-                    .getSessionAttributes()
-                    .get("userId");
+            Map<String, Object> sessionAttributes = accessor.getSessionAttributes();
+
+            Integer userId = sessionAttributes != null ? (Integer) sessionAttributes.get("userId"): null;
 
             if (userId != null) {
-                accessor.setUser(
-                        new StompPrincipal(userId.toString()));
+                accessor.setUser(new StompPrincipal(userId.toString()));
             }
+           else{
+                 System.out.println(">>> AVISO: CONNECT sem userId na sessão!");
+           }
         }
 
         return message;

@@ -17,12 +17,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
    @Query("UPDATE User u SET u.latitude = :lat, u.longitude = :lng, " +
          "u.locationUpdatedAt = :updatedAt, u.online = true " +
          "WHERE u.id = :userId")
-   void updateLocation(@Param("userId") Long userId,
+   void updateLocation(@Param("userId") Integer userId,
          @Param("lat") Double lat,
          @Param("lng") Double lng,
          @Param("updatedAt") Instant updatedAt);
 
    @Modifying(clearAutomatically = true)
    @Query("UPDATE User u SET u.online = false WHERE u.id = :userId")
-   void markOffline(@Param("userId") Long userId);
+   void markOffline(@Param("userId") Integer userId);
 }

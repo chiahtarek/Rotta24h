@@ -7,7 +7,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import com.example.rotta.models.User;
 import com.example.rotta.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -26,11 +25,16 @@ public class WebSocketEventListener {
     public void handleDisconnect(SessionDisconnectEvent event) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         Principal principal = accessor.getUser();
-        User swapUser = userRepository.findByLogin(principal.getName()).orElseThrow(() -> new RuntimeException("Usuário não encontrado")); 
 
-        if (principal != null) {
-            Long userId = swapUser.getId().longValue();
+        if (principal == null) {
+            return; // sessão nunca autenticou (ex: probe de negociação do SockJS) - nada a fazer
+        }
+
+        try {
+            Integer userId = Integer.valueOf(principal.getName()); // já é o userId, não precisa buscar por login
             userRepository.markOffline(userId);
+        } catch (NumberFormatException e) {
+            // não deveria acontecer, mas evita quebrar o listener por segurança
         }
     }
 }
