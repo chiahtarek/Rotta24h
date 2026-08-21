@@ -11,7 +11,6 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import com.example.rotta.websocket.auth.AuthChannelInterceptor;
 import com.example.rotta.websocket.auth.AuthHandshakeInterceptor;
 
-
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -20,18 +19,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final AuthChannelInterceptor authChannelInterceptor;
 
     public WebSocketConfig(AuthHandshakeInterceptor authHandshakeInterceptor,
-                            AuthChannelInterceptor authChannelInterceptor) {
+            AuthChannelInterceptor authChannelInterceptor) {
         this.authHandshakeInterceptor = authHandshakeInterceptor;
         this.authChannelInterceptor = authChannelInterceptor;
     }
 
-        @Override
-        public void registerStompEndpoints(StompEndpointRegistry registry) {
-            registry.addEndpoint("/ws")
-                    .addInterceptors(authHandshakeInterceptor)
-                    .setAllowedOriginPatterns("*")
-                    .withSockJS();
-        }
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+                .addInterceptors(authHandshakeInterceptor)
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+    }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {

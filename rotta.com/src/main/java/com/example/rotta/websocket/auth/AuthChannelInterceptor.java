@@ -16,23 +16,20 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
-        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(
-                message,
-                StompHeaderAccessor.class);
+        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message,StompHeaderAccessor.class);
 
         if (accessor != null &&
                 StompCommand.CONNECT.equals(accessor.getCommand())) {
 
             Map<String, Object> sessionAttributes = accessor.getSessionAttributes();
 
-            Integer userId = sessionAttributes != null ? (Integer) sessionAttributes.get("userId"): null;
+            Integer userId = sessionAttributes != null ? (Integer) sessionAttributes.get("userId") : null;
 
             if (userId != null) {
                 accessor.setUser(new StompPrincipal(userId.toString()));
+            } else {
+                System.out.println(">>> AVISO: CONNECT sem userId na sessão!");
             }
-           else{
-                 System.out.println(">>> AVISO: CONNECT sem userId na sessão!");
-           }
         }
 
         return message;

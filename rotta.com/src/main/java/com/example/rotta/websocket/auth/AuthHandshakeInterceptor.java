@@ -35,17 +35,9 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
             WebSocketHandler wsHandler, Map<String, Object> attributes) {
 
-        System.out.println("================================");
-        System.out.println(">>> HANDSHAKE WS");
-        System.out.println(">>> URI: " + request.getURI());
-
         if (request instanceof ServletServerHttpRequest servletRequest) {
             HttpServletRequest httpRequest = servletRequest.getServletRequest();
             Cookie[] cookies = httpRequest.getCookies();
-
-            System.out.println(
-                    ">>> COOKIES: " +
-                            (cookies == null ? "NULL" : cookies.length));
 
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
@@ -60,13 +52,13 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
                             attributes.put("userId", user.getId());
                             return true;
                         } catch (Exception e) {
-                            return false; // token inválido -> recusa handshake
+                            return false; 
                         }
                     }
                 }
             }
         }
-        return false; // sem cookie -> recusa
+        return false; 
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.rotta.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,10 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
-    MechanicRepository mechanicRepository; 
+    MechanicRepository mechanicRepository;
 
-    @Autowired 
-    RiderRepository riderRepository; 
+    @Autowired
+    RiderRepository riderRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -39,21 +41,28 @@ public class UserService {
 
         System.out.println(dto.role());
 
-        if(dto.role().equals(UserRole.RIDER)){
-            Rider rider = new Rider(); 
+        if (dto.role().equals(UserRole.RIDER)) {
+            Rider rider = new Rider();
             rider.setUser(user);
             rider.setDriverLicense(dto.driverLicense());
-            riderRepository.save(rider); 
-        }
-        else{
-            Mechanic mechanic = new Mechanic(); 
+            riderRepository.save(rider);
+        } else {
+            Mechanic mechanic = new Mechanic();
             mechanic.setUser(user);
             mechanic.setSpeciality(dto.speciality());
             mechanic.setWorkShopName(dto.workShopName());
-            mechanicRepository.save(mechanic); 
+            mechanicRepository.save(mechanic);
         }
-        return true; 
+        return true;
 
+    }
+
+    public List<User> findNearOnline(Double lat, Double lng, Double radius, Integer excludeId, UserRole role){
+         return userRepository.findNearbyOnlineByRole(lat,lng,radius, excludeId, role); 
+    }
+
+    public User findById(Integer userId){
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado")); 
     }
 
 }

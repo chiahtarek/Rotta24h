@@ -47,8 +47,6 @@ public class User implements UserDetails {
 
     @Column(name = "online", nullable = true)
     private boolean online;
-    
-
 
     public User() {
     }
@@ -89,8 +87,45 @@ public class User implements UserDetails {
     public void setPassword(String password) {
         this.password = password;
     }
-    public void setRole(UserRole role){
-        this.role = role; 
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Instant getLocationUpdatedAt() {
+        return locationUpdatedAt;
+    }
+
+    public void setLocationUpdatedAt(Instant locationUpdatedAt) {
+        this.locationUpdatedAt = locationUpdatedAt;
+    }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
     }
 
     @Override
@@ -107,4 +142,3 @@ public class User implements UserDetails {
     }
 
 }
-
