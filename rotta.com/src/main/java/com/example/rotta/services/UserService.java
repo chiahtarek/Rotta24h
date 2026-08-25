@@ -57,12 +57,22 @@ public class UserService {
 
     }
 
-    public List<User> findNearOnline(Double lat, Double lng, Double radius, Integer excludeId, UserRole role){
-         return userRepository.findNearbyOnlineByRole(lat,lng,radius, excludeId, role); 
+    public List<User> findNearOnline(Double lat, Double lng, Double radius, Integer excludeId, UserRole role) {
+        return userRepository.findNearbyOnlineByRole(lat, lng, radius, excludeId, role);
     }
 
-    public User findById(Integer userId){
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado")); 
+    public User findById(Integer userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    }
+
+    public void markOffline(String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        userRepository.markOffline(user.getId());
+    }
+
+    public User findByLogin(String login){
+        return userRepository.findByLogin(login).orElseThrow(()-> new RuntimeException("User não encontrado")); 
     }
 
 }

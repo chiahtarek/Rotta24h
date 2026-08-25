@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -88,6 +89,27 @@ public class AuthController {
 
         ModelAndView mv = new ModelAndView("dashboard");
         return mv;
+    }
+
+    @GetMapping("/logout")
+    public ModelAndView logout(HttpServletResponse response) {
+
+        Cookie cookie = new Cookie("JWT", null);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0); 
+        response.addCookie(cookie);
+
+        SecurityContextHolder.clearContext();
+
+        String login = SecurityContextHolder.getContext().getAuthentication() != null
+                ? SecurityContextHolder.getContext().getAuthentication().getName()
+                : null;
+        if (login != null) {
+            userService.markOffline(login);
+        }
+
+        return new ModelAndView("redirect:/auth/login");
     }
 
 }
