@@ -12,13 +12,16 @@ import org.springframework.stereotype.Controller;
 import com.example.rotta.dto.NotificationDTO;
 import com.example.rotta.dto.NotifyRequestDTO;
 import com.example.rotta.models.User;
+import com.example.rotta.services.LocationService;
 import com.example.rotta.services.UserService;
 
 @Controller
 public class NotificationController {
 
     @Autowired
-    private UserService userService;
+    private LocationService locationService;
+
+    @Autowired UserService userService; 
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -28,7 +31,7 @@ public class NotificationController {
         Integer userId = Integer.valueOf(principal.getName());
         User sender = userService.findById(userId);
 
-        List<User> nearby = userService.findNearOnline(
+        List<User> nearby = locationService.findNearOnline(
                 sender.getLatitude(), sender.getLongitude(), req.radiusKm(), userId, sender.getRole());
 
         NotificationDTO notif = new NotificationDTO(

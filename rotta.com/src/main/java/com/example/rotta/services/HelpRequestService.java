@@ -20,6 +20,7 @@ import com.example.rotta.models.HelpRequest;
 import com.example.rotta.models.Rider;
 import com.example.rotta.models.User;
 import com.example.rotta.repositories.HelpRequestRepository;
+import com.example.rotta.repositories.LocationRepository;
 import com.example.rotta.repositories.RiderRepository;
 import com.example.rotta.repositories.UserRepository;
 
@@ -35,7 +36,7 @@ public class HelpRequestService {
     private HelpRequestRepository helpRequestRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private LocationRepository locationRepository;
 
     @Autowired
     RiderRepository riderRepository;
@@ -55,7 +56,7 @@ public class HelpRequestService {
         helpRequest.setProblemType(dto.problemType());
         helpRequest.setDescription(dto.description());
 
-        List<User> nearbyUsers = userRepository.findNearbyOnlineByRole(dto.latitude(), dto.longitude(), RAIO_KM, user.getId(), UserRole.RIDER);
+        List<User> nearbyUsers = locationRepository.findNearbyOnlineByRole(dto.latitude(), dto.longitude(), RAIO_KM, user.getId(), UserRole.RIDER);
 
         NotificationDTO notif = new NotificationDTO("Novo pedido de ajuda", user.getFullName() + " precisa de ajuda: " + 
         dto.problemType(), dto.latitude(), dto.longitude()); 

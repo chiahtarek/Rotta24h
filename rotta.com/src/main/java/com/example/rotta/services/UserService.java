@@ -57,10 +57,6 @@ public class UserService {
 
     }
 
-    public List<User> findNearOnline(Double lat, Double lng, Double radius, Integer excludeId, UserRole role) {
-        return userRepository.findNearbyOnlineByRole(lat, lng, radius, excludeId, role);
-    }
-
     public User findById(Integer userId) {
         return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
