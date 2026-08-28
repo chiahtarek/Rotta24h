@@ -41,5 +41,6 @@ public interface LocationRepository extends JpaRepository<User, Integer> {
             @Param("radiusKm") Double radiusKm,
             @Param("excludeId") Integer excludeId,
             @Param("role") UserRole role);
+            
 
 }

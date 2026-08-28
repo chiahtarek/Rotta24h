@@ -36,6 +36,9 @@ public class HelpRequestService {
     private HelpRequestRepository helpRequestRepository;
 
     @Autowired
+    private LocationService locationService; //corrigir depois; 
+
+    @Autowired
     private LocationRepository locationRepository;
 
     @Autowired
@@ -56,13 +59,14 @@ public class HelpRequestService {
         helpRequest.setProblemType(dto.problemType());
         helpRequest.setDescription(dto.description());
 
-        List<User> nearbyUsers = locationRepository.findNearbyOnlineByRole(dto.latitude(), dto.longitude(), RAIO_KM, user.getId(), UserRole.RIDER);
-
-        NotificationDTO notif = new NotificationDTO("Novo pedido de ajuda", user.getFullName() + " precisa de ajuda: " + 
-        dto.problemType(), dto.latitude(), dto.longitude()); 
+        List<User> nearbyUsers = locationRepository.findNearbyOnlineByRole(dto.latitude(), dto.longitude(), RAIO_KM, user.getId(), UserRole.RIDER); 
 
         for (User riders : nearbyUsers) {
-            System.out.println(riders.getLogin());
+             Double distance = locationService.calculateDistanceInMeters(riders.getLatitude(), riders.getLongitude(), dto.latitude(), dto.longitude()); 
+             System.out.println("distanceeeeeeeee: " +(distance + 2));
+             String distanceFormatted = distance < 1000 ? String.format("%.0f m", distance) : String.format("%.1f km", distance / 1000);
+             NotificationDTO notif = new NotificationDTO("Novo pedido de ajuda", user.getFullName() + " precisa de ajuda" + dto.problemType(), dto.latitude(), dto.longitude(), distanceFormatted);
+
             messagingTemplate.convertAndSendToUser(riders.getId().toString(), "/queue/notifications", notif);
         }
 

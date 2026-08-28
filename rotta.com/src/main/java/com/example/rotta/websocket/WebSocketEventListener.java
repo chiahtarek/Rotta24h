@@ -27,14 +27,14 @@ public class WebSocketEventListener {
         Principal principal = accessor.getUser();
 
         if (principal == null) {
-            return; // sessão nunca autenticou (ex: probe de negociação do SockJS) - nada a fazer
+            return;
         }
 
         try {
-            Integer userId = Integer.valueOf(principal.getName()); // já é o userId, não precisa buscar por login
+            Integer userId = Integer.valueOf(principal.getName());
             userRepository.markOffline(userId);
         } catch (NumberFormatException e) {
-            // não deveria acontecer, mas evita quebrar o listener por segurança
+           
         }
     }
 }

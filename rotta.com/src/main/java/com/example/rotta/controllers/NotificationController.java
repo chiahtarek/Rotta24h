@@ -21,7 +21,8 @@ public class NotificationController {
     @Autowired
     private LocationService locationService;
 
-    @Autowired UserService userService; 
+    @Autowired 
+    private UserService userService; 
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -31,17 +32,14 @@ public class NotificationController {
         Integer userId = Integer.valueOf(principal.getName());
         User sender = userService.findById(userId);
 
-        List<User> nearby = locationService.findNearOnline(
-                sender.getLatitude(), sender.getLongitude(), req.radiusKm(), userId, sender.getRole());
-
-        NotificationDTO notif = new NotificationDTO(
-                "Pedido de ajuda",
-                sender.getFullName() + " precisa de ajuda perto de você",
-                sender.getLatitude(), sender.getLongitude());
+        List<User> nearby = locationService.findNearOnline(sender.getLatitude(), sender.getLongitude(), req.radiusKm(), userId, sender.getRole());
 
         for (User u : nearby) {
             // "/user/{id}/queue/notifications" — Spring resolve o {id} pelo Principal da
             // sessão do destinatário
+            Double distance = locationService.calculateDistanceInMeters(u.getLatitude(), u.getLongitude(), sender.getLatitude(), sender.getLongitude());
+            NotificationDTO notif = new NotificationDTO( "Pedido de ajuda", sender.getFullName() + " precisa de ajuda perto de você, distancia de: ",sender.getLatitude(), sender.getLongitude(), distance.toString());
+
             messagingTemplate.convertAndSendToUser(u.getId().toString(), "/queue/notifications", notif);
         }
     }

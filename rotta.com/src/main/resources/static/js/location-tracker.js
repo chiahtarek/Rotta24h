@@ -32,7 +32,7 @@
     }
 
     function mostrarNotificacao(data) {
-        alert(`${data.title}\n${data.message}`);
+         alert(`${data.title}\n${data.message}\nDistância: ${data.distance} m`);
     }
 
     window.addEventListener("beforeunload", () => stompClient.deactivate());
