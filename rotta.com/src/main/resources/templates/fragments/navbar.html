@@ -1,47 +1,100 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:fragment="location-tracker-styles">
+        <style>
+            .notificacao {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                width: 300px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                padding: 16px;
+                z-index: 9999;
+            }
+
+            .notificacao strong {
+                display: block;
+                margin-bottom: 8px;
+                color: #d32f2f;
+            }
+
+            .notificacao p {
+                margin-bottom: 12px;
+                font-size: 14px;
+                color: #333;
+            }
+
+            .notificacao button {
+                padding: 8px 16px;
+                margin-right: 8px;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+            .notificacao .aceitar {
+                background: #2e7d32;
+                color: white;
+            }
+
+            .notificacao .recusar {
+                background: #757575;
+                color: white;
+            }
+        </style>
+
+</head>
+
 <body>
 
-<nav th:fragment="navbar" class="navbar navbar-expand-lg" style="background-color:#111;">
 
-    <a class="navbar-brand" th:href="@{/dashboard}" style="color:#fff;font-weight:bold;font-size:22px;">
-        🏍 Rotta 24hasdasdasdas
-    </a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg" style="background-color:#111;">
 
-    <div class="collapse navbar-collapse" id="menu">
+        <a class="navbar-brand" th:href="@{/dashboard}" style="color:#fff;font-weight:bold;font-size:22px;">
+            🏍 Rotta 24hasdasdasdas
+        </a>
 
-        <ul class="navbar-nav ml-auto">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <li class="nav-item dropdown">
+        <div class="collapse navbar-collapse" id="menu">
 
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" style="color:white;">
-                    👤 <span th:text="${username}">Usuário</span>
-                </a>
+            <ul class="navbar-nav ml-auto">
 
-                <div class="dropdown-menu dropdown-menu-right">
+                <li class="nav-item dropdown">
 
-                    <a class="dropdown-item" th:href="@{/perfil}">Meu Perfilssssss</a>
-                    <a class="dropdown-item" th:href="@{/configuracoes}">Configurações</a>
-
-                    <div class="dropdown-divider"></div>
-
-                    <a class="dropdown-item text-danger" th:href="@{/auth/logout}">
-                        🚪 Sair
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" style="color:white;">
+                        👤 <span th:text="${username}">Usuário</span>
                     </a>
 
-                </div>
+                    <div class="dropdown-menu dropdown-menu-right">
 
-            </li>
+                        <a class="dropdown-item" th:href="@{/perfil}">Meu Perfilssssss</a>
+                        <a class="dropdown-item" th:href="@{/configuracoes}">Configurações</a>
 
-        </ul>
+                        <div class="dropdown-divider"></div>
 
-    </div>
+                        <a class="dropdown-item text-danger" th:href="@{/auth/logout}">
+                            🚪 Sair
+                        </a>
 
-</nav>
+                    </div>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
 
 </body>
+
 </html>

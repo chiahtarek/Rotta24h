@@ -1,3 +1,3 @@
 package com.example.rotta.dto;
 
-public record NotificationDTO(String title, String message, Double latitude, Double longitude, String distance) {}
+public record NotificationDTO(Integer helpRequestId, String title, String type, String message, Double latitude, Double longitude, String distance) {}

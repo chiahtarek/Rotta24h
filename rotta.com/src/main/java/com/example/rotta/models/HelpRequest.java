@@ -23,7 +23,6 @@ import jakarta.persistence.Table;
 @Table(name = "helprequest")
 public class HelpRequest {
 
-
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -47,17 +46,23 @@ public class HelpRequest {
     private ProblemType problemType;
 
     @Column(name = "description")
-    private String description; 
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "helper_id")
+    private User helper;
 
     public HelpRequest() {
     }
 
-    public HelpRequest(Rider rider, LocalDateTime dateTime, Double latitude, Double longitude, ProblemType problemType) {
+    public HelpRequest(Rider rider, LocalDateTime dateTime, Double latitude, Double longitude, ProblemType problemType,
+            String description) {
         this.rider = rider;
         this.dateTime = dateTime;
         this.latitude = latitude;
         this.longitude = longitude;
         this.problemType = problemType;
+        this.description = description;
     }
 
     public Integer getId() {
@@ -66,6 +71,14 @@ public class HelpRequest {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public User getHelper() {
+        return helper;
+    }
+
+    public void setHelper(User helper) {
+        this.helper = helper;
     }
 
     public Rider getRider() {
@@ -108,11 +121,11 @@ public class HelpRequest {
         this.problemType = problemType;
     }
 
-    public String getDescription(){
-        return description; 
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         this.description = description;
     }
 

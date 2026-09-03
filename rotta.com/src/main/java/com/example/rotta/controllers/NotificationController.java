@@ -38,7 +38,7 @@ public class NotificationController {
             // "/user/{id}/queue/notifications" — Spring resolve o {id} pelo Principal da
             // sessão do destinatário
             Double distance = locationService.calculateDistanceInMeters(u.getLatitude(), u.getLongitude(), sender.getLatitude(), sender.getLongitude());
-            NotificationDTO notif = new NotificationDTO( "Pedido de ajuda", sender.getFullName() + " precisa de ajuda perto de você, distancia de: ",sender.getLatitude(), sender.getLongitude(), distance.toString());
+            NotificationDTO notif = new NotificationDTO(null, "Pedido de ajuda","New Request",  sender.getFullName() + " precisa de ajuda perto de você, distancia de: ",sender.getLatitude(), sender.getLongitude(), distance.toString());
 
             messagingTemplate.convertAndSendToUser(u.getId().toString(), "/queue/notifications", notif);
         }

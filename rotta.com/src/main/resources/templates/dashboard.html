@@ -5,10 +5,9 @@
     <meta charset="UTF-8">
     <title>Dashboard - Rotta 24h</title>
 
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-    >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+     <th:block th:replace="~{fragments/scripts :: location-tracker-styles}"></th:block>
 
     <style>
         body {
@@ -259,8 +258,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
 
-    <!-- LOCATION TRACKER -->
-    <div th:replace="~{fragments/scripts :: location-tracker}"></div>
+    <th:block th:replace="~{fragments/scripts :: location-tracker-script}"></th:block>
 
 </body>
 

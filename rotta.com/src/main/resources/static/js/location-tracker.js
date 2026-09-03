@@ -31,8 +31,46 @@
         );
     }
 
+    // function mostrarNotificacao(data) {
+    //      alert(`${data.title}\n${data.message}\nDistância: ${data.distance} m`);
+    // }
+
     function mostrarNotificacao(data) {
-         alert(`${data.title}\n${data.message}\nDistância: ${data.distance} m`);
+        if (data.type === "CANCELLED") {
+            removerNotificacao(data.helpRequestId);
+            return;
+        }
+        if (data.type === "ACCEPTED") {
+            alert(`${data.title}\n${data.message}`);
+            return;
+        }
+
+        const container = document.createElement("div");
+        container.id = `notif-${data.helpRequestId}`;
+        container.className = "notificacao";
+        container.innerHTML = `
+        <strong>${data.title}</strong>
+        <p>${data.message} ${data.distance}</p>
+        <button class="aceitar">Aceitar</button>
+        <button class="recusar">Recusar</button>
+    `;
+
+        container.querySelector(".aceitar").onclick = () => {
+            stompClient.publish({
+                destination: "/app/notify.accept",
+                body: JSON.stringify({ helpRequestId: data.helpRequestId })
+            });
+            container.remove();
+        };
+
+        container.querySelector(".recusar").onclick = () => container.remove();
+
+        document.body.appendChild(container);
+    }
+
+    function removerNotificacao(helpRequestId) {
+        const el = document.getElementById(`notif-${helpRequestId}`);
+        if (el) el.remove();
     }
 
     window.addEventListener("beforeunload", () => stompClient.deactivate());
