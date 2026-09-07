@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 
 import com.example.rotta.config.TokenConfig;
 import com.example.rotta.dto.LoginRequestDTO;
@@ -39,6 +41,8 @@ public class AuthController {
 
     @Autowired
     UserService userService;
+
+    
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -68,24 +72,22 @@ public class AuthController {
     public ModelAndView loginPost(@RequestParam String login, @RequestParam String password,
             HttpServletResponse response) throws Exception {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(login, password));
-        } catch (Exception ex) {
-            throw new Exception("Credentials Invalid");
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
+
+                   User user = (User) authentication.getPrincipal();  
+
+                   String token = tokenConfig.generateToken(user);
+
+                    Cookie cookie = new Cookie("JWT", token);
+                    cookie.setHttpOnly(true);
+                    cookie.setPath("/");
+                    cookie.setMaxAge(60 * 60);
+                    response.addCookie(cookie);   
+        } catch (BadCredentialsException ex) {
+            ModelAndView mv = new ModelAndView("/auth/login");
+            mv.addObject("Error", "Credentials Invalid"); 
+            return mv; 
         }
-
-        User user = new User();
-        user.setLogin(login);
-        user.setPassword(password);
-
-        String token = tokenConfig.generateToken(user);
-
-        Cookie cookie = new Cookie("JWT", token);
-
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(60 * 60);
-        response.addCookie(cookie);
 
         ModelAndView mv = new ModelAndView("dashboard");
         return mv;

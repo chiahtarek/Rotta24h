@@ -24,8 +24,8 @@
 
     <!-- Mensagem de erro -->
     <div class="alert alert-danger"
-         th:if="${errorMessage}"
-         th:text="${errorMessage}">
+         th:if="${Error}"
+         th:text="${Error}">
     </div>
 
     <form th:action="@{/auth/login}" method="post">
