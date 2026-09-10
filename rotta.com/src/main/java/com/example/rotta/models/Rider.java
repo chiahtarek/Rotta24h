@@ -43,6 +43,22 @@ public class Rider {
         this.user = user;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<HelpRequest> getHelpRequests() {
+        return helpRequests;
+    }
+
+    public void setHelpRequests(List<HelpRequest> helpRequests) {
+        this.helpRequests = helpRequests;
+    }
+
     public String getDriverLicense() {
         return driverLicense;
     }

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Motorcycles - Rotta 24h</title>
+
+    <!-- Bootstrap -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f5f6fa;
+        }
+
+        .page-title {
+            margin-top: 30px;
+            margin-bottom: 25px;
+        }
+
+        .motorcycle-card {
+            background: white;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: 0.3s;
+            height: 100%;
+        }
+
+        .motorcycle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .motorcycle-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .motorcycle-brand {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .motorcycle-model {
+            color: #666;
+            font-size: 17px;
+            margin-bottom: 20px;
+        }
+
+        .motorcycle-info {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 3px;
+        }
+
+        .info-value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .license-plate {
+            display: inline-block;
+            background-color: #111;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .btn-moto {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+        }
+
+        .btn-moto:hover {
+            background-color: #e64a19;
+            color: white;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 15px;
+            padding: 50px 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #777;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div th:replace="~{/fragments/navbar :: navbar}"></div>
+
+
+    <div class="container">
+
+        <!-- PAGE HEADER -->
+        <div class="d-flex justify-content-between align-items-center page-title">
+
+            <div>
+                <h2>My Motorcycles 🏍</h2>
+
+                <p class="text-muted mb-0">
+                    Manage your registered motorcycles.
+                </p>
+            </div>
+
+            <a
+                th:href="@{/motorcycle/add}"
+                class="btn btn-moto">
+
+                ➕ Register Motorcycle
+
+            </a>
+
+        </div>
+
+
+        <!-- SUCCESS MESSAGE -->
+        <div
+            class="alert alert-success"
+            th:if="${successMessage}"
+            th:text="${successMessage}">
+        </div>
+
+
+        <!-- ERROR MESSAGE -->
+        <div
+            class="alert alert-danger"
+            th:if="${errorMessage}"
+            th:text="${errorMessage}">
+        </div>
+
+
+        <!-- MOTORCYCLES -->
+        <div class="row" th:if="${motorcycles != null and !motorcycles.isEmpty()}">
+
+            <div
+                class="col-md-4 mb-4"
+                th:each="motorcycle : ${motorcycles}">
+
+                <div class="motorcycle-card p-4">
+
+                    <div class="text-center">
+
+                        <div class="motorcycle-icon">
+                            🏍
+                        </div>
+
+                        <div
+                            class="motorcycle-brand"
+                            th:text="${motorcycle.brand}">
+                            Honda
+                        </div>
+
+                        <div
+                            class="motorcycle-model"
+                            th:text="${motorcycle.model}">
+                            CB 500
+                        </div>
+
+                    </div>
+
+
+                    <!-- MOTORCYCLE INFORMATION -->
+                    <div class="motorcycle-info">
+
+                        <div class="row">
+
+                            <!-- LICENSE PLATE -->
+                            <div class="col-7">
+
+                                <div class="info-label">
+                                    License Plate
+                                </div>
+
+                                <div
+                                    class="license-plate"
+                                    th:text="${motorcycle.licensePlate}">
+                                    ABC-1234
+                                </div>
+
+                            </div>
+
+
+                            <!-- YEAR -->
+                            <div class="col-5">
+
+                                <div class="info-label">
+                                    Year
+                                </div>
+
+                                <div
+                                    class="info-value"
+                                    th:text="${motorcycle.year}">
+                                    2024
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+                    <div class="mt-4">
+
+                        <a
+                            th:href="@{/motorcycle/edit/{id}(id=${motorcycle.id})}"
+                            class="btn btn-outline-primary btn-sm">
+
+                            ✏ Edit
+
+                        </a>
+
+                        <a
+                            th:href="@{/motorcycle/delete/{id}(id=${motorcycle.id})}"
+                            class="btn btn-outline-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this motorcycle?');">
+
+                            🗑 Delete
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EMPTY STATE -->
+        <div
+            class="empty-state"
+            th:if="${motorcycles == null or motorcycles.isEmpty()}">
+
+            <div class="empty-icon">
+                🏍
+            </div>
+
+            <h3>No motorcycles registered</h3>
+
+            <p>
+                You don't have any motorcycles registered yet.
+            </p>
+
+            <a
+                th:href="@{/motorcycle/add}"
+                class="btn btn-moto">
+
+                ➕ Register Your First Motorcycle
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
