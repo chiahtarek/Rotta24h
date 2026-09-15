@@ -41,7 +41,24 @@
             return;
         }
         if (data.type === "ACCEPTED") {
-            alert(`${data.title}\n${data.message}`);
+            console.log("teste nessa function");
+            const container = document.createElement("div");
+
+            container.id = `notif-${data.helpRequestId}`;
+            container.className = "notificacao accepted";
+
+            container.innerHTML = `
+        <strong>${data.title}</strong>
+        <p>${data.message}</p>
+        <button class="fechar">Fechar</button>
+    `;
+
+            container.querySelector(".fechar").onclick = () => {
+                container.remove();
+            };
+
+            document.body.appendChild(container);
+
             return;
         }
 

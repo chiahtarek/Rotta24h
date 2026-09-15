@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <body>
 
     <th:block th:fragment="location-tracker-styles">
@@ -14,17 +15,21 @@
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
                 padding: 16px;
                 z-index: 9999;
+                box-sizing: border-box;
             }
+
             .notificacao strong {
                 display: block;
                 margin-bottom: 8px;
                 color: #d32f2f;
             }
+
             .notificacao p {
                 margin-bottom: 12px;
                 font-size: 14px;
                 color: #333;
             }
+
             .notificacao button {
                 padding: 8px 16px;
                 margin-right: 8px;
@@ -33,13 +38,33 @@
                 cursor: pointer;
                 font-size: 14px;
             }
+
             .notificacao .aceitar {
                 background: #2e7d32;
                 color: white;
             }
+
             .notificacao .recusar {
                 background: #757575;
                 color: white;
+            }
+
+            /* Notificação de pedido aceito */
+            .notificacao.accepted {
+                z-index: 10000;
+            }
+
+            .notificacao.accepted strong {
+                color: #2e7d32;
+            }
+
+            .notificacao .fechar {
+                background: #1976d2;
+                color: white;
+            }
+
+            .notificacao .fechar:hover {
+                background: #1565c0;
             }
         </style>
     </th:block>
@@ -51,4 +76,5 @@
     </th:block>
 
 </body>
+
 </html>
