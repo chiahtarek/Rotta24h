@@ -111,6 +111,7 @@ public class HelpRequestService {
         User helper = userRepository.findById(helperId).orElseThrow();
 
         Integer requesterId = helpRequest.getRider().getUser().getId();
+        System.out.println("id do requester é "+requesterId);
         NotificationDTO notifyRequester = new NotificationDTO(requestId, "Pedido aceito", "ACCEPTED",
                 helper.getFullName() + " está a caminho.", null, null, null);
         messagingTemplate.convertAndSendToUser(requesterId.toString(), "/queue/notifications", notifyRequester);
