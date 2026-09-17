@@ -85,7 +85,7 @@ public class AuthController {
                     response.addCookie(cookie);   
         } catch (BadCredentialsException ex) {
             ModelAndView mv = new ModelAndView("/auth/login");
-            mv.addObject("Error", "Credentials Invalid"); 
+            mv.addObject("Error", "Invalid Credentials"); 
             return mv; 
         }
 
