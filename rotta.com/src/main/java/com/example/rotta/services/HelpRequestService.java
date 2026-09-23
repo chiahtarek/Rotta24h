@@ -1,20 +1,17 @@
 package com.example.rotta.services;
 
-import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.management.Notification;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import com.example.rotta.dto.HelpRequestDTO;
 import com.example.rotta.dto.NotificationDTO;
@@ -30,6 +27,8 @@ import com.example.rotta.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class HelpRequestService {
@@ -59,6 +58,31 @@ public class HelpRequestService {
 
     private Map<Integer, Set<Integer>> notifiedUsers = new ConcurrentHashMap<>();
 
+    private final RestClient restClient = RestClient.create();
+
+    public String userAddress(double lat, double lng) {
+        try {
+            String body = restClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                    .scheme("https").host("nominatim.openstreetmap.org").path("/reverse")
+                    .queryParam("format", "json")
+                    .queryParam("lat", lat)
+                    .queryParam("lon", lng)
+                    .queryParam("addressdetails", 1)
+                    .queryParam("accept-language", "pt-BR")
+                    .build())
+                    .header("User-Agent", "Rotta24h/1.0 (chiahtarek@gmail.com)") // Nominatim REQUIRES this
+                    .retrieve()
+                    .body(String.class);
+
+            JsonNode node = new ObjectMapper().readTree(body);
+            return node.path("display_name").asText(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // never let geocoding break location updates
+        }
+    }
+
     public HelpRequest save(HelpRequestDTO dto) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -85,7 +109,7 @@ public class HelpRequestService {
                     distanceFormatted);
 
             messagingTemplate.convertAndSendToUser(riders.getId().toString(), "/queue/notifications", notif);
-            System.out.println("user login e id: " +riders.getLogin() +riders.getFullName() +riders.getId());
+            System.out.println("user login e id: " + riders.getLogin() + riders.getFullName() + riders.getId());
             notifiedIds.add(riders.getId());
         }
 
@@ -111,7 +135,12 @@ public class HelpRequestService {
         User helper = userRepository.findById(helperId).orElseThrow();
 
         Integer requesterId = helpRequest.getRider().getUser().getId();
-        System.out.println("id do requester é "+requesterId);
+        //System.out.println("id do requester é " + requesterId);
+
+        User requesterUser = userRepository.findById(requesterId).orElseThrow();
+
+        String requesterAddress = userAddress(requesterUser.getLatitude(), requesterUser.getLongitude());
+
         NotificationDTO notifyRequester = new NotificationDTO(requestId, "Pedido aceito", "ACCEPTED",
                 helper.getFullName() + " está a caminho.", null, null, null);
         messagingTemplate.convertAndSendToUser(requesterId.toString(), "/queue/notifications", notifyRequester);
@@ -119,6 +148,11 @@ public class HelpRequestService {
         Set<Integer> notified = notifiedUsers.getOrDefault(requestId, Set.of());
         NotificationDTO cancel = new NotificationDTO(requestId, "Indisponível", "CANCELLED",
                 "Esse pedido já foi atendido por outro usuário.", null, null, null);
+
+        NotificationDTO not = new NotificationDTO(requestId, "Vá até o endereço: "+ requesterAddress,"ACCEPTED", requesterUser.getFullName()
+                + "está lhe esperando", null, null, null); 
+
+        messagingTemplate.convertAndSendToUser(helperId.toString(), "/queue/notifications", not); 
 
         for (Integer uid : notified) {
             if (!uid.equals(helperId)) {
@@ -129,4 +163,5 @@ public class HelpRequestService {
         notifiedUsers.remove(requestId);
         return true;
     }
+
 }
