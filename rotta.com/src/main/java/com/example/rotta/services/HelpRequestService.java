@@ -11,7 +11,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
 import com.example.rotta.dto.HelpRequestDTO;
 import com.example.rotta.dto.NotificationDTO;
@@ -27,8 +26,6 @@ import com.example.rotta.repositories.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class HelpRequestService {
@@ -58,30 +55,7 @@ public class HelpRequestService {
 
     private Map<Integer, Set<Integer>> notifiedUsers = new ConcurrentHashMap<>();
 
-    private final RestClient restClient = RestClient.create();
-
-    public String userAddress(double lat, double lng) {
-        try {
-            String body = restClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                    .scheme("https").host("nominatim.openstreetmap.org").path("/reverse")
-                    .queryParam("format", "json")
-                    .queryParam("lat", lat)
-                    .queryParam("lon", lng)
-                    .queryParam("addressdetails", 1)
-                    .queryParam("accept-language", "pt-BR")
-                    .build())
-                    .header("User-Agent", "Rotta24h/1.0 (chiahtarek@gmail.com)") // Nominatim REQUIRES this
-                    .retrieve()
-                    .body(String.class);
-
-            JsonNode node = new ObjectMapper().readTree(body);
-            return node.path("display_name").asText(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null; // never let geocoding break location updates
-        }
-    }
+    private UserAddressService userAddressService = new UserAddressService();
 
     public HelpRequest save(HelpRequestDTO dto) {
 
@@ -139,7 +113,7 @@ public class HelpRequestService {
 
         User requesterUser = userRepository.findById(requesterId).orElseThrow();
 
-        String requesterAddress = userAddress(requesterUser.getLatitude(), requesterUser.getLongitude());
+        String requesterAddress = userAddressService.getUserAddress(requesterUser.getLatitude(), requesterUser.getLongitude());
 
         NotificationDTO notifyRequester = new NotificationDTO(requestId, "Pedido aceito", "ACCEPTED",
                 helper.getFullName() + " está a caminho.", null, null, null);
@@ -149,10 +123,10 @@ public class HelpRequestService {
         NotificationDTO cancel = new NotificationDTO(requestId, "Indisponível", "CANCELLED",
                 "Esse pedido já foi atendido por outro usuário.", null, null, null);
 
-        NotificationDTO not = new NotificationDTO(requestId, "Vá até o endereço: "+ requesterAddress,"ACCEPTED", requesterUser.getFullName()
-                + "está lhe esperando", null, null, null); 
+        NotificationDTO not = new NotificationDTO(requestId, "Vá até o endereço: " + requesterAddress, "ACCEPTED", requesterUser.getFullName()
+                + " está lhe esperando ", null, null, null);
 
-        messagingTemplate.convertAndSendToUser(helperId.toString(), "/queue/notifications", not); 
+        messagingTemplate.convertAndSendToUser(helperId.toString(), "/queue/notifications", not);
 
         for (Integer uid : notified) {
             if (!uid.equals(helperId)) {
