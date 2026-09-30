@@ -123,7 +123,7 @@ public class HelpRequestService {
         NotificationDTO cancel = new NotificationDTO(requestId, "Indisponível", "CANCELLED",
                 "Esse pedido já foi atendido por outro usuário.", null, null, null);
 
-        NotificationDTO not = new NotificationDTO(requestId, "Vá até o endereço: " + requesterAddress, "ACCEPTED", requesterUser.getFullName()
+        NotificationDTO not = new NotificationDTO(requestId, "Vá até o endereço: " + requesterAddress, "NOTIFYHELPER", requesterUser.getFullName()
                 + " está lhe esperando ", null, null, null);
 
         messagingTemplate.convertAndSendToUser(helperId.toString(), "/queue/notifications", not);

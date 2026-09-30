@@ -41,7 +41,6 @@
             return;
         }
         if (data.type === "ACCEPTED") {
-            console.log("teste nessa function");
             const container = document.createElement("div");
 
             container.id = `notif-${data.helpRequestId}`;
@@ -58,6 +57,38 @@
             };
 
             document.body.appendChild(container);
+
+            return;
+        }
+
+        if(data.type === "NOTIFYHELPER"){
+             const container = document.createElement("div");
+
+            container.id = `notif-${data.helpRequestId}`;
+            container.className = "notificacao notifyhelper";
+
+            container.innerHTML = `
+                <strong>${data.title}</strong>
+                <p>${data.message}</p>
+                <span class="contador">0</span>
+            `;
+
+            document.body.appendChild(container);
+
+            let contador = 0;
+
+            const contadorElement = container.querySelector(".contador");
+
+            const intervalo = setInterval(() => {
+                contador++;
+                contadorElement.textContent = contador;
+            }, 1000);
+
+            // Exemplo: remover automaticamente após 10 segundos
+            setTimeout(() => {
+                clearInterval(intervalo);
+                //container.remove();
+            }, 10000);
 
             return;
         }
