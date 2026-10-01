@@ -23,7 +23,7 @@ public class DashboardController {
         ModelAndView mv = new ModelAndView("dashboard");
         String login = principal.getName();
         User user = userService.findByLogin(login); 
-        mv.addObject("user", user); 
+        mv.addObject("user", user);
         return mv;
     }
 }

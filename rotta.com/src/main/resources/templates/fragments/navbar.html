@@ -47,7 +47,6 @@
                 color: white;
             }
 
-            /* Navbar buttons */
             .navbar-buttons .nav-link {
                 color: white !important;
                 margin-right: 10px;
@@ -90,7 +89,6 @@
 
         <div class="collapse navbar-collapse" id="menu">
 
-            <!-- Navigation buttons -->
             <ul class="navbar-nav navbar-buttons ml-3">
 
                 <li class="nav-item">
@@ -100,14 +98,16 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item"
+                    th:if="${user.role != null and user.role.name() == 'RIDER'}">
                     <a class="nav-link register-motorcycle"
                        th:href="@{/motorcycle/add}">
                         🏍 Register Motorcycle
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item"
+                    th:if="${user.role != null and user.role.name() == 'RIDER'}">
                     <a class="nav-link"
                        th:href="@{/motorcycle/list}">
                         🏍 My Motorcycles
@@ -123,7 +123,6 @@
 
             </ul>
 
-            <!-- User menu -->
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item dropdown">

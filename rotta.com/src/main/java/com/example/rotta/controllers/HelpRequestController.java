@@ -7,7 +7,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.rotta.dto.AcceptRequestDTO;
 import com.example.rotta.dto.HelpRequestDTO;
-import com.example.rotta.models.HelpRequest;
+import com.example.rotta.models.User;
 import com.example.rotta.services.HelpRequestService;
+import com.example.rotta.services.UserService;
 
 @Controller
 @RequestMapping("help")
@@ -25,9 +25,14 @@ public class HelpRequestController {
     @Autowired
     HelpRequestService helpRequestService;
 
+    @Autowired UserService userService; 
+
     @GetMapping("/request")
-    public ModelAndView helpGet() {
+    public ModelAndView helpGet(Principal principal) {
         ModelAndView mv = new ModelAndView("helprequest/add");
+        String login = principal.getName(); 
+        User user = userService.findByLogin(login); 
+        mv.addObject("user", user); 
         return mv;
     }
 
