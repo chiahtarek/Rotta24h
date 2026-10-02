@@ -83,6 +83,8 @@ public class AuthController {
         }
 
         ModelAndView mv = new ModelAndView("dashboard");
+        User user = userService.findByLogin(login); 
+        mv.addObject("user", user); 
         return mv;
     }
 
