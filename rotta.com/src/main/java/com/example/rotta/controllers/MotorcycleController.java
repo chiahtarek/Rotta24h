@@ -27,8 +27,11 @@ public class MotorcycleController {
     private MotorcycleService motorcycleService;
 
     @GetMapping("/add")
-    public ModelAndView addGet() {
+    public ModelAndView addGet(Principal principal) {
         ModelAndView mv = new ModelAndView("motorcycle/add");
+        String login = principal.getName();
+        User user = userService.findByLogin(login); 
+        mv.addObject("user", user);
         return mv;
     }
 
@@ -44,8 +47,10 @@ public class MotorcycleController {
     public ModelAndView list(Principal principal) {
         ModelAndView mv = new ModelAndView("motorcycle/list");
         String userName = principal.getName();
+        User user = userService.findByLogin(userName); 
         List<Motorcycle> motorcycles = motorcycleService.motorcyclesByLogin(userName);
         mv.addObject("motorcycles", motorcycles);
+        mv.addObject("user", user); 
         return mv;
     }
 }
