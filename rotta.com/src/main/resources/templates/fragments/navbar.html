@@ -99,7 +99,7 @@
                 </li>
 
                 <li class="nav-item"
-                    th:if="${user.role != null and user.role.name() == 'RIDER'}">
+                    th:if="${user != null and user.role != null and user.role.name() == 'RIDER'}">
                     <a class="nav-link register-motorcycle"
                        th:href="@{/motorcycle/add}">
                         🏍 Register Motorcycle
@@ -107,7 +107,7 @@
                 </li>
 
                 <li class="nav-item"
-                    th:if="${user.role != null and user.role.name() == 'RIDER'}">
+                    th:if="${user != null and user.role != null and user.role.name() == 'RIDER'}">
                     <a class="nav-link"
                        th:href="@{/motorcycle/list}">
                         🏍 My Motorcycles

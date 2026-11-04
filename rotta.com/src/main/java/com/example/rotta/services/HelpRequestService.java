@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.rotta.dto.HelpRequestDTO;
 import com.example.rotta.dto.NotificationDTO;
+import com.example.rotta.enums.HelpRequestStatus;
 import com.example.rotta.enums.UserRole;
 import com.example.rotta.models.HelpRequest;
 import com.example.rotta.models.Rider;
@@ -64,8 +65,9 @@ public class HelpRequestService {
         Rider rider = riderRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Rider not found"));
 
         LocalDateTime now = LocalDateTime.now();
+
         HelpRequest helpRequest = new HelpRequest(rider, now, dto.latitude(), dto.longitude(), dto.problemType(),
-                dto.description());
+                dto.description(), HelpRequestStatus.OPEN );
         helpRequestRepository.save(helpRequest);
 
         List<User> nearbyUsers = locationRepository.findNearbyOnlineByRole(dto.latitude(), dto.longitude(), RAIO_KM,
@@ -83,7 +85,7 @@ public class HelpRequestService {
                     distanceFormatted);
 
             messagingTemplate.convertAndSendToUser(riders.getId().toString(), "/queue/notifications", notif);
-            System.out.println("user login e id: " + riders.getLogin() + riders.getFullName() + riders.getId());
+            //System.out.println("user login e id: " + riders.getLogin() + riders.getFullName() + riders.getId());
             notifiedIds.add(riders.getId());
         }
 
@@ -96,7 +98,7 @@ public class HelpRequestService {
     @Transactional
     public boolean acceptHelpRequest(Integer requestId, Integer helperId) {
         User helperRef = entityManager.getReference(User.class, helperId);
-        Integer updated = helpRequestRepository.acceptIfAvailable(requestId, helperRef);
+        Integer updated = helpRequestRepository.acceptIfAvailable(requestId, helperRef, HelpRequestStatus.ACCEPTED);
 
         if (updated == 0) {
             NotificationDTO tooLate = new NotificationDTO(requestId, "Indisponível", "TOO_LATE",

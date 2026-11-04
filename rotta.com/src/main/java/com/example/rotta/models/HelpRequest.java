@@ -2,6 +2,7 @@ package com.example.rotta.models;
 
 import java.time.LocalDateTime;
 
+import com.example.rotta.enums.HelpRequestStatus;
 import com.example.rotta.enums.ProblemType;
 
 import jakarta.persistence.Column;
@@ -48,17 +49,22 @@ public class HelpRequest {
     @JoinColumn(name = "helper_id")
     private User helper;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = true)
+    private HelpRequestStatus status;
+
     public HelpRequest() {
     }
 
     public HelpRequest(Rider rider, LocalDateTime dateTime, Double latitude, Double longitude, ProblemType problemType,
-            String description) {
+            String description, HelpRequestStatus status) {
         this.rider = rider;
         this.dateTime = dateTime;
         this.latitude = latitude;
         this.longitude = longitude;
         this.problemType = problemType;
         this.description = description;
+        this.status = status; 
     }
 
     public Integer getId() {
