@@ -47,22 +47,26 @@
             container.className = "notificacao accepted";
 
             container.innerHTML = `
-        <strong>${data.title}</strong>
-        <p>${data.message}</p>
-        <button class="fechar">Fechar</button>
-    `;
+                <strong>${data.title}</strong>
+                <p>${data.message}</p>
+                <button class="btn-redirect">
+                    Clique aqui para mais informações
+                </button>
+            `;
 
-            container.querySelector(".fechar").onclick = () => {
-                container.remove();
-            };
+            const button = container.querySelector(".btn-redirect");
+
+            button.addEventListener("click", () => {
+                window.location.href = `/helprequest/details/${data.helpRequestId}`;
+            });
 
             document.body.appendChild(container);
 
             return;
         }
 
-        if(data.type === "NOTIFYHELPER"){
-             const container = document.createElement("div");
+        if (data.type === "NOTIFYHELPER") {
+            const container = document.createElement("div");
 
             container.id = `notif-${data.helpRequestId}`;
             container.className = "notificacao notifyhelper";
@@ -70,25 +74,18 @@
             container.innerHTML = `
                 <strong>${data.title}</strong>
                 <p>${data.message}</p>
-                <span class="contador">0</span>
+                <button class="btn-redirect">
+                    Clique aqui para mais informações
+                </button>
             `;
 
+            const button = container.querySelector(".btn-redirect");
+
+            button.addEventListener("click", () => {
+                window.location.href = `/helprequest/details/${data.helpRequestId}`;
+            });
+
             document.body.appendChild(container);
-
-            let contador = 0;
-
-            const contadorElement = container.querySelector(".contador");
-
-            const intervalo = setInterval(() => {
-                contador++;
-                contadorElement.textContent = contador;
-            }, 1000);
-
-            // Exemplo: remover automaticamente após 10 segundos
-            setTimeout(() => {
-                clearInterval(intervalo);
-                //container.remove();
-            }, 10000);
 
             return;
         }
