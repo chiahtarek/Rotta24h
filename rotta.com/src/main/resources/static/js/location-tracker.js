@@ -3,15 +3,52 @@
         webSocketFactory: () => new SockJS('/ws', null, { transports: ['websocket'] }), reconnectDelay: 5000,
     });
 
+    let locationInterval = null; 
+
     stompClient.onConnect = () => {
-        enviarLocalizacao();
-        setInterval(enviarLocalizacao, 30000);
+        if(!locationInterval){
+            enviarLocalizacao();
+           locationInterval = setInterval(enviarLocalizacao, 30000);
+        }
+       
 
         stompClient.subscribe('/user/queue/notifications', (msg) => {
             const data = JSON.parse(msg.body);
             mostrarNotificacao(data);
         });
 
+        subscribeTrackingTopics();
+
+    };
+
+    const trackingSubscriptions = new Map();
+
+    function subscribeTrackingTopics() {
+
+        trackingSubscriptions.forEach((callback, requestId) => {
+
+            stompClient.subscribe(
+                `/topic/helprequest/${requestId}`,
+                (message) => {
+                    callback(JSON.parse(message.body));
+                }
+            );
+
+        });
+    }
+
+    window.subscribeHelpRequestTracking = function (requestId, callback) {
+
+        trackingSubscriptions.set(String(requestId), callback);
+
+        if (stompClient.connected) {
+            stompClient.subscribe(
+                `/topic/helprequest/${requestId}`,
+                (message) => {
+                    callback(JSON.parse(message.body));
+                }
+            );
+        }
     };
 
     stompClient.activate();

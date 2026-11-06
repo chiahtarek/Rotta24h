@@ -131,4 +131,12 @@ public class HelpRequest {
         this.description = description;
     }
 
+    public HelpRequestStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(HelpRequestStatus status) {
+        this.status = status;
+    }
+
 }

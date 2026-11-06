@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Acompanhamento - Rotta</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #263238;
+            padding: 30px 15px;
+        }
+
+        .tracking-container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+
+        .tracking-header h1 {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        .tracking-header p {
+            color: #7b8794;
+            font-size: 14px;
+        }
+
+        .connection-status {
+            padding: 8px 13px;
+            border-radius: 20px;
+            background: #fff0d6;
+            color: #b45309;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .connection-status.online {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .distance-card {
+            background: #172b4d;
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .distance-card span {
+            color: #bdc9df;
+            font-size: 14px;
+        }
+
+        .distance-card h2 {
+            font-size: 42px;
+            margin: 14px 0;
+        }
+
+        .distance-card p {
+            font-size: 12px;
+            color: #bdc9df;
+        }
+
+        .users-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .user-card {
+            background: white;
+            padding: 24px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 22px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .helper-avatar {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .rider-avatar {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .user-header h3 {
+            font-size: 17px;
+            margin-bottom: 5px;
+        }
+
+        .user-header small {
+            color: #8993a4;
+        }
+
+        .address-label {
+            color: #8993a4;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        .address {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #334155;
+            min-height: 65px;
+            overflow-wrap: anywhere;
+        }
+
+        .location-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #15803d;
+            font-size: 11px;
+            margin-top: 15px;
+        }
+
+        .location-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        @media(max-width: 650px) {
+
+            .users-container {
+                grid-template-columns: 1fr;
+            }
+
+            .tracking-header h1 {
+                font-size: 21px;
+            }
+
+            .distance-card h2 {
+                font-size: 32px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="tracking-container"
+     th:attr="
+        data-request-id=${tracking.helpRequestId},
+        data-helper-id=${tracking.helperId},
+        data-rider-user-id=${tracking.riderUserId}">
+
+    <header class="tracking-header">
+
+        <div>
+            <h1>Acompanhamento</h1>
+
+            <p>
+                Solicitação #
+                <span th:text="${tracking.helpRequestId}"></span>
+            </p>
+        </div>
+
+        <span id="connectionStatus"
+              class="connection-status">
+            Conectando...
+        </span>
+
+    </header>
+
+    <!-- DISTÂNCIA -->
+
+    <section class="distance-card">
+
+        <span>Distância entre os usuários</span>
+
+        <h2 id="distanceValue"
+            th:text="${tracking.distanceInMeters != null ?
+                (tracking.distanceInMeters >= 1000 ?
+                #numbers.formatDecimal(tracking.distanceInMeters / 1000, 1, 2) + ' km' :
+                #numbers.formatDecimal(tracking.distanceInMeters, 1, 0) + ' metros') :
+                'Aguardando localização'}">
+
+        </h2>
+
+        <p>Distância calculada em linha reta</p>
+
+    </section>
+
+    <section class="users-container">
+
+        <!-- HELPER -->
+
+        <article class="user-card">
+
+            <div class="user-header">
+
+                <div class="user-avatar helper-avatar">
+                    H
+                </div>
+
+                <div>
+                    <h3 id="helperName"
+                        th:text="${tracking.helperName}">
+                    </h3>
+
+                    <small>Prestador de ajuda</small>
+                </div>
+
+            </div>
+
+            <p class="address-label">
+                ENDEREÇO ATUAL
+            </p>
+
+            <p class="address"
+               id="helperAddress"
+               th:text="${tracking.helperAddress != null ?
+                   tracking.helperAddress :
+                   'Localização indisponível'}">
+            </p>
+
+            <div class="location-status">
+                <span class="location-dot"></span>
+                Localização recebida
+            </div>
+
+        </article>
+
+        <!-- RIDER -->
+
+        <article class="user-card">
+
+            <div class="user-header">
+
+                <div class="user-avatar rider-avatar">
+                    R
+                </div>
+
+                <div>
+                    <h3 id="riderName"
+                        th:text="${tracking.riderName}">
+                    </h3>
+
+                    <small>Solicitante</small>
+                </div>
+
+            </div>
+
+            <p class="address-label">
+                ENDEREÇO ATUAL
+            </p>
+
+            <p class="address"
+               id="riderAddress"
+               th:text="${tracking.riderAddress != null ?
+                   tracking.riderAddress :
+                   'Localização indisponível'}">
+            </p>
+
+            <div class="location-status">
+                <span class="location-dot"></span>
+                Localização recebida
+            </div>
+
+        </article>
+
+    </section>
+
+</div>
+
+<script th:src="@{/js/helprequest-details.js}"></script>
+
+<th:block th:replace="~{fragments/scripts :: location-tracker-script}"></th:block>
+
+</body>
+</html>

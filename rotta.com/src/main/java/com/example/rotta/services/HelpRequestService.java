@@ -56,7 +56,8 @@ public class HelpRequestService {
 
     private Map<Integer, Set<Integer>> notifiedUsers = new ConcurrentHashMap<>();
 
-    private UserAddressService userAddressService = new UserAddressService();
+    @Autowired
+    private UserAddressService userAddressService; 
 
     public HelpRequest save(HelpRequestDTO dto) {
 
