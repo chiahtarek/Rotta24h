@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.rotta.dto.HelpRequestTrackingDTO;
@@ -79,7 +82,7 @@ public class HelpRequestTrackingService {
                         -> new RuntimeException("Usuário do Rider não encontrado"));
 
         HelpRequestTrackingDTO dto = new HelpRequestTrackingDTO(request.getId(), helper.getId(), helper.getFullName(), getAddress(helper),
-                rider.getId(), rider.getUser().getId(), rider.getUser().getFullName(), getAddress(rider.getUser()), calculateDistance(helper, riderUser));
+                rider.getId(), rider.getUser().getId(), rider.getUser().getFullName(), getAddress(rider.getUser()), calculateDistance(helper, riderUser), request.getStatus());
 
         return dto;
     }
@@ -149,12 +152,39 @@ public class HelpRequestTrackingService {
 
         User updatedUser = isHelper ? helper : riderUser;
 
-        LocationUpdateTrackingDTO dto = new LocationUpdateTrackingDTO(request.getId(), updatedUser.getId(), updatedUser.getFullName(), getAddress(updatedUser), calculateDistance(helper, riderUser));
+        LocationUpdateTrackingDTO dto = new LocationUpdateTrackingDTO(request.getId(), updatedUser.getId(), updatedUser.getFullName(), getAddress(updatedUser), calculateDistance(helper, riderUser), request.getStatus());
 
         messagingTemplate.convertAndSend(
                 "/topic/helprequest/" + request.getId(),
                 dto
         );
+    }
+
+    @Transactional
+    public void markArrived(Integer requestId, String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new AccessDeniedException("Usuário não encontrado"));
+        HelpRequest request = helpRequestRepository.findById(requestId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User helper = request.getHelper();
+        if (helper == null || !helper.getId().equals(user.getId())) {
+            throw new AccessDeniedException("Somente o prestador de ajuda pode confirmar a chegada.");
+        }
+        User rider = request.getRider().getUser();
+        if (request.getStatus() == HelpRequestStatus.ARRIVED) {
+            return;
+        }
+        if (request.getStatus() != HelpRequestStatus.ACCEPTED || helper == null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Solicitação não está em atendimento");
+        }
+        Double distance = calculateDistance(helper, rider);
+        if (distance == null || !Double.isFinite(distance) || distance < 0 || distance > 50) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Os usuários precisam estar a até 50 metros de distância.");
+        }
+        request.setStatus(HelpRequestStatus.ARRIVED);
+        helpRequestRepository.save(request);
+        publishTrackingUpdate(request, user.getId());
     }
 
     // ENDEREÇO

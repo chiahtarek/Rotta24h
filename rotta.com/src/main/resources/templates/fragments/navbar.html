@@ -3,76 +3,13 @@
 
 <head>
     <th:block th:fragment="location-tracker-styles">
-        <style>
-            .notificacao {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                width: 300px;
-                background: white;
-                border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-                padding: 16px;
-                z-index: 9999;
-            }
-
-            .notificacao strong {
-                display: block;
-                margin-bottom: 8px;
-                color: #d32f2f;
-            }
-
-            .notificacao p {
-                margin-bottom: 12px;
-                font-size: 14px;
-                color: #333;
-            }
-
-            .notificacao button {
-                padding: 8px 16px;
-                margin-right: 8px;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 14px;
-            }
-
-            .notificacao .aceitar {
-                background: #2e7d32;
-                color: white;
-            }
-
-            .notificacao .recusar {
-                background: #757575;
-                color: white;
-            }
-
-            .navbar-buttons .nav-link {
-                color: white !important;
-                margin-right: 10px;
-                padding: 8px 14px !important;
-                border-radius: 6px;
-                transition: background-color 0.2s;
-            }
-
-            .navbar-buttons .nav-link:hover {
-                background-color: #333;
-            }
-
-            .navbar-buttons .register-motorcycle {
-                background-color: #2e7d32;
-            }
-
-            .navbar-buttons .register-motorcycle:hover {
-                background-color: #388e3c;
-            }
-        </style>
+        <link rel="stylesheet" th:href="@{/css/rotta.css}">
     </th:block>
 </head>
 
 <body>
 
-    <nav th:fragment="navbar" class="navbar navbar-expand-lg" style="background-color:#111;">
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg">
 
         <a class="navbar-brand"
            th:href="@{/dashboard}"

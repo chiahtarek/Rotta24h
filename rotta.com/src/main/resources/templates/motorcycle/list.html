@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>My Motorcycles - Rotta 24h</title>
 
@@ -9,109 +10,7 @@
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-
-    <style>
-        body {
-            background-color: #f5f6fa;
-        }
-
-        .page-title {
-            margin-top: 30px;
-            margin-bottom: 25px;
-        }
-
-        .motorcycle-card {
-            background: white;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            transition: 0.3s;
-            height: 100%;
-        }
-
-        .motorcycle-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-        }
-
-        .motorcycle-icon {
-            font-size: 50px;
-            margin-bottom: 10px;
-        }
-
-        .motorcycle-brand {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .motorcycle-model {
-            color: #666;
-            font-size: 17px;
-            margin-bottom: 20px;
-        }
-
-        .motorcycle-info {
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-            margin-top: 15px;
-        }
-
-        .info-label {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 3px;
-        }
-
-        .info-value {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .license-plate {
-            display: inline-block;
-            background-color: #111;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .btn-moto {
-            background-color: #ff5722;
-            color: white;
-            border: none;
-        }
-
-        .btn-moto:hover {
-            background-color: #e64a19;
-            color: white;
-        }
-
-        .empty-state {
-            background: white;
-            border-radius: 15px;
-            padding: 50px 30px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .empty-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-
-        .empty-state h3 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .empty-state p {
-            color: #777;
-            margin-bottom: 25px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/rotta.css}">
 </head>
 
 <body>

@@ -2,19 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Register Motorcycle test</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/rotta.css}">
 </head>
 
 <body>
 
 <div th:replace="~{/fragments/navbar :: navbar}"></div>
 
-<div class="container mt-5">
+<div class="container form-page">
 
     <h2>Register Motorcycle</h2>
 

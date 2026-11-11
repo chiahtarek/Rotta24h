@@ -1,0 +1,219 @@
+
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #263238;
+            padding: 30px 15px;
+        }
+
+        .tracking-container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+
+        .tracking-header h1 {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        .tracking-header p {
+            color: #7b8794;
+            font-size: 14px;
+        }
+
+        .connection-status {
+            padding: 8px 13px;
+            border-radius: 20px;
+            background: #fff0d6;
+            color: #b45309;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .connection-status.online {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .distance-card {
+            background: #172b4d;
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .distance-card span {
+            color: #bdc9df;
+            font-size: 14px;
+        }
+
+        .distance-card h2 {
+            font-size: 42px;
+            margin: 14px 0;
+        }
+
+        .distance-card p {
+            font-size: 12px;
+            color: #bdc9df;
+        }
+
+        .users-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .user-card {
+            background: white;
+            padding: 24px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 22px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .helper-avatar {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .rider-avatar {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .user-header h3 {
+            font-size: 17px;
+            margin-bottom: 5px;
+        }
+
+        .user-header small {
+            color: #8993a4;
+        }
+
+        .address-label {
+            color: #8993a4;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        .address {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #334155;
+            min-height: 65px;
+            overflow-wrap: anywhere;
+        }
+
+        .location-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #15803d;
+            font-size: 11px;
+            margin-top: 15px;
+        }
+
+        .location-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        @media(max-width: 650px) {
+
+            .users-container {
+                grid-template-columns: 1fr;
+            }
+
+            .tracking-header h1 {
+                font-size: 21px;
+            }
+
+            .distance-card h2 {
+                font-size: 32px;
+            }
+        }
+
+    
+
+:root { --navy: #172b4d; --muted: #7b8794; }
+body { font-family: Arial, sans-serif; background: #f3f5f9; color: #263238; padding: 30px 15px; }
+.container, .page-content { max-width: 850px; margin: 0 auto; }
+.navbar { background: #172b4d; border-radius: 16px; margin: 0 auto 25px; max-width: 1100px; padding: 16px; }
+.navbar-brand, .navbar .nav-link { color: white !important; }
+.navbar-brand { font-size: 18px; font-weight: bold; white-space: normal; }
+.navbar-toggler { border: 1px solid #bdc9df; }
+.navbar-toggler-icon { background: linear-gradient(#bdc9df,#bdc9df) center 25%/75% 2px no-repeat, linear-gradient(#bdc9df,#bdc9df) center/75% 2px no-repeat, linear-gradient(#bdc9df,#bdc9df) center 75%/75% 2px no-repeat; }
+h1, h2 { font-size: 26px; margin-bottom: 14px; }
+h3, h4 { font-size: 20px; margin-bottom: 10px; }
+p { line-height: 1.6; }
+.banner { background: #172b4d; color: white; padding: 30px; border-radius: 16px; margin-bottom: 22px; }
+.banner p { color: #bdc9df; margin-bottom: 0; }
+.card, .motorcycle-card, .profile-card, .calls-card, .empty-state, .form-page { background: white; padding: 24px; border: 0; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,.04); }
+.card-dashboard, .motorcycle-card, .calls-card { height: 100%; }
+.page-title { margin-bottom: 25px; gap: 16px; flex-wrap: wrap; }
+.form-page { max-width: 600px; }
+.page-content .card { width: 100%; max-width: 600px; margin: auto; }
+.form-group { margin-bottom: 20px; }
+label { font-size: 14px; font-weight: bold; margin-bottom: 8px; }
+.form-control, .page-content select, .page-content input { width: 100%; border: 1px solid #dbe2ec; border-radius: 8px; padding: 12px; height: auto; background: white; color: #334155; }
+.page-content select, .page-content input { margin-bottom: 20px; }
+.form-control:focus, select:focus, input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px #dbeafe; }
+.btn, #btnHelpRequest { border-radius: 8px; padding: 11px 18px; font-size: 14px; font-weight: bold; cursor: pointer; }
+.btn-primary, .btn-moto, #btnHelpRequest { background: #172b4d; border: 1px solid #172b4d; color: white; }
+.btn-primary:hover, .btn-moto:hover, #btnHelpRequest:hover { background: #253f68; color: white; }
+.btn-secondary { background: #e8edf5; border-color: #e8edf5; color: #334155; }
+.btn-outline-primary { color: #2563eb; border-color: #2563eb; }
+.btn-danger-custom { color: #dc3545; border: 1px solid #dc3545; }
+.btn:disabled { opacity: .6; cursor: wait; }
+[hidden] { display: none !important; }
+.text-muted, .profile-email, .info-label, .motorcycle-model, .calls-description { color: #7b8794 !important; }
+.profile-avatar { width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%; background: #dbeafe; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; }
+.profile-name, .motorcycle-brand, .calls-title { font-size: 22px; font-weight: bold; }
+.profile-info, .motorcycle-info { border-top: 1px solid #e8edf5; margin-top: 24px; padding-top: 24px; }
+.info-value { font-weight: bold; overflow-wrap: anywhere; }
+.icon, .motorcycle-icon, .calls-icon, .empty-icon { font-size: 42px; margin-bottom: 14px; }
+.calls-number { font-size: 42px; color: #2563eb; font-weight: bold; }
+.empty-state { text-align: center; }
+.license-plate { display: inline-block; background: #172b4d; color: white; padding: 6px 12px; border-radius: 6px; }
+#description { display: none; }
+#status { margin-top: 20px; color: #2563eb; }
+.arrival-actions { margin-top: 22px; text-align: center; }
+.arrival-actions p { margin-top: 12px; color: #7b8794; }
+@media(max-width:650px) { body { padding: 20px 12px; } .navbar { padding: 12px; } h1, h2 { font-size: 21px; } }

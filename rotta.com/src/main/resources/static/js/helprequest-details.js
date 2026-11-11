@@ -13,6 +13,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const status = document.getElementById("connectionStatus");
 
+    const arrivedButton = document.getElementById("arrivedButton");
+    const arrivalStatus = document.getElementById("arrivalStatus");
+    let requestStatus = container.dataset.status;
+    let submitting = false;
+
+    function updateArrival(distance) {
+        const meters = distance === null || distance === undefined || distance === ""
+            ? NaN : Number(distance);
+        if (arrivedButton) arrivedButton.hidden = requestStatus !== "ACCEPTED" || !Number.isFinite(meters)
+            || meters < 0 || meters > 50;
+        if (requestStatus === "ARRIVED") arrivalStatus.textContent = "Chegada confirmada.";
+    }
+
+    updateArrival(container.dataset.distance);
+    arrivedButton?.addEventListener("click", async () => {
+        if (submitting || arrivedButton.hidden) return;
+        submitting = true;
+        arrivedButton.disabled = true;
+        try {
+            const response = await fetch(container.dataset.arrivalUrl, {
+                method: "POST",
+                headers: { "Accept": "application/json" }
+            });
+            if (!response.ok || response.redirected) throw new Error("Arrival failed");
+            requestStatus = "ARRIVED";
+            updateArrival(null);
+        } catch (error) {
+            arrivalStatus.textContent = "Não foi possível confirmar. Verifique se estão a até 50 metros e tente novamente.";
+        } finally {
+            submitting = false;
+            arrivedButton.disabled = false;
+        }
+    });
+
     function formatDistance(meters) {
 
         if (meters >= 1000) {
@@ -59,6 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        if (data.status) requestStatus = data.status;
+        updateArrival(data.distanceInMeters);
+
         // Distância entre os dois
         if (data.distanceInMeters != null) {
 
@@ -66,6 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 .textContent = formatDistance(
                     Number(data.distanceInMeters)
                 );
+        } else {
+            document.getElementById("distanceValue").textContent = "Aguardando localização";
         }
     }
 

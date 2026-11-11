@@ -6,6 +6,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -32,6 +36,13 @@ public class HelpRequestTrackingController {
         this.trackingService = trackingService;
         this.helpRequestRepository = helpRequestRepository;
         this.userRepository = userRepository; 
+    }
+
+    @PostMapping("/details/{id}/arrived")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void arrived(@PathVariable Integer id, Principal principal) {
+        trackingService.markArrived(id, principal.getName());
     }
 
     @GetMapping("/details/{id}")
@@ -65,6 +76,7 @@ public class HelpRequestTrackingController {
                 = trackingService.getTracking(id);
 
         model.addAttribute("tracking", tracking);
+        model.addAttribute("isHelper", isHelper);
 
         return "helprequest/details";
     }

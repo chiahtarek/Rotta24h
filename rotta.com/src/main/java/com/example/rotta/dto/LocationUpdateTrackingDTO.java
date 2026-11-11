@@ -1,5 +1,7 @@
 package com.example.rotta.dto;
 
-public record LocationUpdateTrackingDTO(Integer helpRequestId, Integer userId, String userName, String address, Double distanceInMeters) {
+import com.example.rotta.enums.HelpRequestStatus;
+
+public record LocationUpdateTrackingDTO(Integer helpRequestId, Integer userId, String userName, String address, Double distanceInMeters, HelpRequestStatus status) {
     
 }
