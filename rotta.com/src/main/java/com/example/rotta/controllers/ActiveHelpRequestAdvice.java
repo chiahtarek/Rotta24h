@@ -3,6 +3,9 @@ package com.example.rotta.controllers;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import com.example.rotta.models.User;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 

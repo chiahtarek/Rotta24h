@@ -234,3 +234,59 @@ label { font-size: 14px; font-weight: bold; margin-bottom: 8px; }
 }
 .active-help-request p { margin: 6px 0 0; color: #7b8794; font-size: 14px; }
 .active-help-request .btn { flex-shrink: 0; text-decoration: none; }
+
+/* Navigation works on every view without Bootstrap's JavaScript. */
+.app-navbar { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 20px; }
+.app-navbar .navbar-brand { margin: 0; flex-shrink: 0; font-size: 21px; color: #fff; text-decoration: none; }
+.app-nav-menu { display: flex; flex: 1; min-width: 0; align-items: center; justify-content: space-between; gap: 12px; }
+.app-nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.app-nav-links a, .app-account-menu summary { display: block; padding: 10px 12px; color: #fff; border-radius: 8px; font-size: 14px; line-height: 24px; cursor: pointer; }
+.app-nav-links a:hover, .app-account-menu summary:hover { background: #253f68; text-decoration: none; }
+.app-account-menu { position: relative; min-width: 0; max-width: 200px; margin-left: auto; }
+.app-account-menu summary { display: list-item; list-style-position: inside; overflow-wrap: anywhere; }
+.app-account-links { position: absolute; right: 0; top: calc(100% + 8px); width: 200px; padding: 8px; z-index: 100; background: #fff; border: 1px solid #e8edf5; border-radius: 12px; box-shadow: 0 8px 24px #172b4d20; }
+.app-account-links a { display: block; padding: 10px 12px; color: #334155; border-radius: 6px; }
+.app-account-links a:hover { background: #f3f5f9; text-decoration: none; }
+.app-nav-toggle { display: none; min-height: 44px; padding: 8px 12px; border: 1px solid #bdc9df; border-radius: 8px; background: transparent; color: #fff; cursor: pointer; }
+.app-navbar a:focus-visible, .app-navbar button:focus-visible, .app-navbar summary:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+.container, .page-content, .tracking-container, .form-page { width: 100%; min-width: 0; }
+.row > *, .users-container > *, .user-header > div { min-width: 0; }
+.user-avatar, .location-dot { flex-shrink: 0; }
+.profile-name, .profile-email, .motorcycle-brand, .motorcycle-model, .user-header h3, .distance-card h2, .banner, .alert { overflow-wrap: anywhere; }
+.tracking-header { flex-wrap: wrap; }
+.connection-status { max-width: 100%; }
+.page-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.page-actions .btn { margin: 0 !important; }
+.page-actions form { margin: 0; }
+input, select, textarea { max-width: 100%; }
+.btn, .form-control, .page-content select, .page-content input { min-height: 44px; }
+.btn { white-space: normal; }
+.notificacao { max-height: calc(100dvh - 48px); overflow-y: auto; overflow-wrap: anywhere; }
+
+@media (max-width: 991.98px) {
+    .app-navbar { gap: 12px; }
+    .app-nav-menu { flex-basis: 100%; align-items: stretch; flex-direction: column; }
+    .app-nav-links { flex-direction: column; align-items: stretch; }
+    .app-navbar[data-enhanced="true"] .app-nav-toggle { display: block; margin-left: auto; }
+    .app-navbar[data-enhanced="true"] .app-nav-menu:not(.is-open) { display: none; }
+    .app-account-menu { margin: 0; max-width: none; }
+    .app-account-links { position: static; width: 100%; margin-top: 8px; }
+}
+@media (max-width: 575.98px) {
+    body { padding: 16px 12px; }
+    .container { padding-left: 0; padding-right: 0; }
+    .app-navbar { padding: 12px; margin-bottom: 20px; }
+    .app-navbar .navbar-brand { font-size: 19px; }
+    .card, .profile-card, .calls-card, .empty-state, .form-page, .user-card, .banner, .distance-card { padding: 20px; }
+    .distance-card h2 { font-size: 30px; }
+    .tracking-header { align-items: flex-start; }
+    .tracking-header h1 { font-size: 22px; }
+    .user-header { gap: 10px; }
+    .active-help-request { padding: 16px; }
+    .active-help-request .btn, .page-title > .btn, .arrival-actions .btn { width: 100%; }
+    .responsive-form > .btn { width: 100%; margin-top: 10px; }
+    .page-actions { flex-direction: column; }
+    .page-actions > *, .page-actions form .btn { width: 100%; }
+    .form-control, .page-content input, .page-content select { font-size: 16px; }
+    .notificacao { max-height: calc(100dvh - 24px); }
+}

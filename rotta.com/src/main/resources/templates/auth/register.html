@@ -27,7 +27,7 @@
         </div>
 
 
-        <form th:action="@{/auth/register}" method="post">
+        <form class="responsive-form" th:action="@{/auth/register}" method="post">
 
             <!-- CSRF -->
             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
