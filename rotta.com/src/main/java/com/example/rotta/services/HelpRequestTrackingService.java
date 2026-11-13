@@ -55,6 +55,22 @@ public class HelpRequestTrackingService {
     // DADOS INICIAIS DA TELA
 
     @Transactional(readOnly = true)
+    public List<Integer> getActiveRequestIds(String login) {
+        return userRepository.findByLogin(login).map(user -> {
+            Map<Integer, HelpRequest> requests = new LinkedHashMap<>();
+            helpRequestRepository.findByHelper_IdAndStatusIn(user.getId(), ACTIVE_STATUSES)
+                    .forEach(request -> requests.put(request.getId(), request));
+            helpRequestRepository.findByRider_UserIdAndStatusIn(user.getId(), ACTIVE_STATUSES)
+                    .forEach(request -> requests.put(request.getId(), request));
+            return requests.values().stream()
+                    .filter(request -> request.getHelper() != null && request.getRider() != null)
+                    .map(request -> request.getId())
+                    .sorted(java.util.Comparator.reverseOrder())
+                    .toList();
+        }).orElseGet(List::of);
+    }
+
+    @Transactional(readOnly = true)
     public HelpRequestTrackingDTO getTracking(Integer requestId) {
 
         HelpRequest request = helpRequestRepository.findById(requestId)

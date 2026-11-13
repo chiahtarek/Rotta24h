@@ -217,3 +217,20 @@ label { font-size: 14px; font-weight: bold; margin-bottom: 8px; }
 .arrival-actions { margin-top: 22px; text-align: center; }
 .arrival-actions p { margin-top: 12px; color: #7b8794; }
 @media(max-width:650px) { body { padding: 20px 12px; } .navbar { padding: 12px; } h1, h2 { font-size: 21px; } }
+:root { --active-request-accent: #2563eb; }
+.active-help-requests { max-width: 850px; margin: 0 auto 22px; }
+.active-help-request {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    background: #fff;
+    border-left: 4px solid var(--active-request-accent);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.04);
+}
+.active-help-request p { margin: 6px 0 0; color: #7b8794; font-size: 14px; }
+.active-help-request .btn { flex-shrink: 0; text-decoration: none; }

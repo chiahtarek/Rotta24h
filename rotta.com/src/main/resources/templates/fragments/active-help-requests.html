@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <aside th:fragment="notice" class="active-help-requests" aria-label="Solicitações de ajuda em andamento"
+           th:if="${not #lists.isEmpty(activeHelpRequestIds)}">
+        <div class="active-help-request" th:each="requestId : ${activeHelpRequestIds}">
+            <div>
+                <strong>Você tem uma solicitação de ajuda em andamento.</strong>
+                <p>Solicitação #<span th:text="${requestId}"></span> — acompanhe o atendimento.</p>
+            </div>
+            <a class="btn btn-primary"
+               th:href="@{/helprequest/details/{id}(id=${requestId})}"
+               th:attr="aria-label=${'Voltar ao acompanhamento da solicitação #' + requestId}">
+                Voltar ao acompanhamento
+            </a>
+        </div>
+    </aside>
+</body>
+</html>
