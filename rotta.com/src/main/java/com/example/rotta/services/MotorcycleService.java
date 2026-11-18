@@ -41,4 +41,9 @@ public class MotorcycleService {
         Rider rider = riderRepository.findByUser(user).orElseThrow();
         return motorcycleRepository.listById(rider.getId());
     }
+
+    public Motorcycle findById(Integer id){
+        return motorcycleRepository.findById(id).orElseThrow(); 
+    }
+
 }

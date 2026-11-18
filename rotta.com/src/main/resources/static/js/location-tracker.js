@@ -8,7 +8,7 @@
     stompClient.onConnect = () => {
         if(!locationInterval){
             enviarLocalizacao();
-           locationInterval = setInterval(enviarLocalizacao, 30000);
+           locationInterval = setInterval(enviarLocalizacao, 10000);
         }
        
 

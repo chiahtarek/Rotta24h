@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.rotta.models.Motorcycle;
+import com.example.rotta.models.Rider;
 import com.example.rotta.models.User;
+import com.example.rotta.repositories.RiderRepository;
 import com.example.rotta.services.MotorcycleService;
 import com.example.rotta.services.UserService;
 
@@ -26,11 +29,14 @@ public class MotorcycleController {
     @Autowired
     private MotorcycleService motorcycleService;
 
+    @Autowired
+    private RiderRepository riderRepository;
+
     @GetMapping("/add")
     public ModelAndView addGet(Principal principal) {
         ModelAndView mv = new ModelAndView("motorcycle/add");
         String login = principal.getName();
-        User user = userService.findByLogin(login); 
+        User user = userService.findByLogin(login);
         mv.addObject("user", user);
         return mv;
     }
@@ -47,10 +53,30 @@ public class MotorcycleController {
     public ModelAndView list(Principal principal) {
         ModelAndView mv = new ModelAndView("motorcycle/list");
         String userName = principal.getName();
-        User user = userService.findByLogin(userName); 
+        User user = userService.findByLogin(userName);
         List<Motorcycle> motorcycles = motorcycleService.motorcyclesByLogin(userName);
         mv.addObject("motorcycles", motorcycles);
-        mv.addObject("user", user); 
+        mv.addObject("user", user);
         return mv;
     }
+
+    @GetMapping("/edit/{id}")
+    public ModelAndView edit(@PathVariable Integer id, Principal principal) {
+        ModelAndView mv = new ModelAndView("motorcycle/edit");
+        Motorcycle motorcycle = motorcycleService.findById(id);
+        mv.addObject(motorcycle);
+        return mv;
+    }
+
+    @PostMapping("/edit")
+    public ModelAndView updateMotorcycle(@ModelAttribute Motorcycle motorcycle, Principal principal) {
+        motorcycleService.save(motorcycle);
+        ModelAndView mv = new ModelAndView("dashboard");
+        String login = principal.getName();
+        User user = userService.findByLogin(login);
+        mv.addObject("user", user);
+
+        return mv;
+    }
+
 }
