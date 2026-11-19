@@ -28,7 +28,7 @@
         trackingSubscriptions.forEach((callback, requestId) => {
 
             stompClient.subscribe(
-                `/topic/helprequest/${requestId}`,
+                `/user/queue/helprequest/${requestId}`,
                 (message) => {
                     callback(JSON.parse(message.body));
                 }
@@ -43,7 +43,7 @@
 
         if (stompClient.connected) {
             stompClient.subscribe(
-                `/topic/helprequest/${requestId}`,
+                `/user/queue/helprequest/${requestId}`,
                 (message) => {
                     callback(JSON.parse(message.body));
                 }

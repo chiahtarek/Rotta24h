@@ -11,6 +11,8 @@
     <title>Acompanhamento - Rotta</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <th:block th:replace="~{fragments/scripts :: location-tracker-styles}"></th:block>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/rotta.css}">
 </head>
 
@@ -25,7 +27,12 @@
         data-status=${tracking.status},
         data-arrival-url=@{/helprequest/details/{id}/arrived(id=${tracking.helpRequestId})},
         data-helper-id=${tracking.helperId},
-        data-rider-user-id=${tracking.riderUserId}">
+        data-rider-user-id=${tracking.riderUserId},
+        data-is-helper=${isHelper},
+        data-helper-latitude=${tracking.helperLatitude},
+        data-helper-longitude=${tracking.helperLongitude},
+        data-rider-latitude=${tracking.riderLatitude},
+        data-rider-longitude=${tracking.riderLongitude}">
 
     <header class="tracking-header">
 
@@ -64,96 +71,46 @@
 
     </section>
 
-    <section class="users-container">
-
-        <!-- HELPER -->
-
-        <article class="user-card">
-
-            <div class="user-header">
-
-                <div class="user-avatar helper-avatar">
-                    H
-                </div>
-
-                <div>
-                    <h3 id="helperName"
-                        th:text="${tracking.helperName}">
-                    </h3>
-
-                    <small>Prestador de ajuda</small>
-                </div>
-
-            </div>
-
-            <p class="address-label">
-                ENDEREÇO ATUAL
-            </p>
-
-            <p class="address"
-               id="helperAddress"
-               th:text="${tracking.helperAddress != null ?
-                   tracking.helperAddress :
-                   'Localização indisponível'}">
-            </p>
-
-            <div class="location-status">
-                <span class="location-dot"></span>
-                Localização recebida
-            </div>
-
-        </article>
-
-        <!-- RIDER -->
-
-        <article class="user-card">
-
-            <div class="user-header">
-
-                <div class="user-avatar rider-avatar">
-                    R
-                </div>
-
-                <div>
-                    <h3 id="riderName"
-                        th:text="${tracking.riderName}">
-                    </h3>
-
-                    <small>Solicitante</small>
-                </div>
-
-            </div>
-
-            <p class="address-label">
-                ENDEREÇO ATUAL
-            </p>
-
-            <p class="address"
-               id="riderAddress"
-               th:text="${tracking.riderAddress != null ?
-                   tracking.riderAddress :
-                   'Localização indisponível'}">
-            </p>
-
-            <div class="location-status">
-                <span class="location-dot"></span>
-                Localização recebida
-            </div>
-
-        </article>
-
+    <section class="tracking-map-card" aria-label="Mapa de acompanhamento">
+        <div class="tracking-map-controls">
+            <span class="tracking-map-key tracking-map-self">Você</span>
+            <span id="otherMapLabel" class="tracking-map-key tracking-map-other"
+                  th:text="${isHelper ? 'Solicitante' : 'Prestador de ajuda'}"></span>
+            <button id="fitTrackingMap" type="button" class="btn btn-sm btn-outline-secondary" hidden>
+                Recentrar
+            </button>
+        </div>
+        <div id="trackingMap" class="tracking-map" aria-label="Localização dos participantes" hidden></div>
+        <p id="trackingMapStatus" role="status">Aguardando localização dos participantes.</p>
     </section>
+
+    <article class="user-card">
+        <div class="user-header">
+            <div class="user-avatar" th:classappend="${isHelper ? 'rider-avatar' : 'helper-avatar'}"
+                 th:text="${isHelper ? 'R' : 'H'}" aria-hidden="true"></div>
+            <div>
+                <h3 th:text="${tracking.otherName}"></h3>
+                <small th:text="${isHelper ? 'Solicitante' : 'Prestador de ajuda'}"></small>
+            </div>
+        </div>
+
+        <p class="address-label">ENDEREÇO ATUAL</p>
+        <p class="address" id="otherAddress"
+           th:text="${tracking.otherAddress ?: 'Localização indisponível'}"></p>
+    </article>
 
     <section class="arrival-actions">
         <button th:if="${isHelper}" id="arrivedButton" type="button" class="btn btn-primary" hidden
                 th:hidden="${tracking.status.name() != 'ACCEPTED' or tracking.distanceInMeters == null or tracking.distanceInMeters > 50}">
-            Arrived
+            Confirmar chegada
         </button>
         <p id="arrivalStatus" role="status" aria-live="polite"
-           th:text="${tracking.status.name() == 'ARRIVED' ? 'Chegada confirmada.' : 'Confirme a chegada quando estiverem a até 50 metros.'}"></p>
+           th:text="${tracking.status.name() == 'ARRIVED' ? 'Chegada confirmada.' : (isHelper ? 'Confirme a chegada quando estiverem a até 50 metros.' : 'Aguardando a chegada do prestador de ajuda.')}"></p>
     </section>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
 <script th:src="@{/js/helprequest-details.js}"></script>
 
 <th:block th:replace="~{fragments/scripts :: location-tracker-script}"></th:block>

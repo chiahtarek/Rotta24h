@@ -71,11 +71,11 @@ public class MotorcycleController {
     @PostMapping("/edit")
     public ModelAndView updateMotorcycle(@ModelAttribute Motorcycle motorcycle, Principal principal) {
         motorcycleService.save(motorcycle);
-        ModelAndView mv = new ModelAndView("dashboard");
+        ModelAndView mv = new ModelAndView("motorcycle/edit");
         String login = principal.getName();
         User user = userService.findByLogin(login);
         mv.addObject("user", user);
-
+        mv.addObject("successMessage", "Motorcycle updated with Success");
         return mv;
     }
 

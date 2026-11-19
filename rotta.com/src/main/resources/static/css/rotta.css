@@ -290,3 +290,56 @@ input, select, textarea { max-width: 100%; }
     .form-control, .page-content input, .page-content select { font-size: 16px; }
     .notificacao { max-height: calc(100dvh - 24px); }
 }
+
+.tracking-map-card {
+    background: white;
+    padding: 16px;
+    border-radius: 16px;
+    margin-bottom: 22px;
+}
+
+.tracking-map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 18px;
+    margin-bottom: 12px;
+}
+
+.tracking-map-controls button {
+    margin-left: auto;
+}
+
+.tracking-map-self { --tracking-color: #1d4ed8; }
+.tracking-map-other { --tracking-color: #15803d; }
+
+.tracking-map-key::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: var(--tracking-color);
+}
+
+.tracking-map {
+    height: clamp(260px, 48vh, 420px);
+    border-radius: 10px;
+    isolation: isolate;
+}
+
+.tracking-pin {
+    display: grid;
+    place-items: center;
+    border: 2px solid white;
+    border-radius: 50%;
+    background: var(--tracking-color);
+    color: white;
+    font-weight: bold;
+}
+
+#trackingMapStatus {
+    margin: 8px 0 0;
+    color: #475569;
+}

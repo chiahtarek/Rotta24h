@@ -8,6 +8,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,6 +30,16 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
                 accessor.setUser(new StompPrincipal(userId.toString()));
             } else {
                 System.out.println(">>> AVISO: CONNECT sem userId na sessão!");
+            }
+        }
+
+        if (accessor != null) {
+            String destination = accessor.getDestination();
+            if (destination != null && (destination.startsWith("/queue/helprequest/")
+                    || (StompCommand.SEND.equals(accessor.getCommand())
+                        && destination.startsWith("/user/")
+                        && destination.contains("/queue/helprequest/")))) {
+                throw new AccessDeniedException("Destino de acompanhamento reservado.");
             }
         }
 

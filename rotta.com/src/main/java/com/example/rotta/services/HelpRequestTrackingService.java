@@ -71,7 +71,7 @@ public class HelpRequestTrackingService {
     }
 
     @Transactional(readOnly = true)
-    public HelpRequestTrackingDTO getTracking(Integer requestId) {
+    public HelpRequestTrackingDTO getTracking(Integer requestId, boolean isHelper) {
 
         HelpRequest request = helpRequestRepository.findById(requestId)
                 .orElseThrow(()
@@ -97,10 +97,12 @@ public class HelpRequestTrackingService {
                 .orElseThrow(()
                         -> new RuntimeException("Usuário do Rider não encontrado"));
 
-        HelpRequestTrackingDTO dto = new HelpRequestTrackingDTO(request.getId(), helper.getId(), helper.getFullName(), getAddress(helper),
-                rider.getId(), rider.getUser().getId(), rider.getUser().getFullName(), getAddress(rider.getUser()), calculateDistance(helper, riderUser), request.getStatus());
+        User otherUser = isHelper ? riderUser : helper;
 
-        return dto;
+        return new HelpRequestTrackingDTO(request.getId(), helper.getId(), riderUser.getId(),
+                otherUser.getFullName(), getAddress(otherUser),
+                helper.getLatitude(), helper.getLongitude(), riderUser.getLatitude(), riderUser.getLongitude(),
+                calculateDistance(helper, riderUser), request.getStatus());
     }
 
 
@@ -168,12 +170,16 @@ public class HelpRequestTrackingService {
 
         User updatedUser = isHelper ? helper : riderUser;
 
-        LocationUpdateTrackingDTO dto = new LocationUpdateTrackingDTO(request.getId(), updatedUser.getId(), updatedUser.getFullName(), getAddress(updatedUser), calculateDistance(helper, riderUser), request.getStatus());
+        Integer otherUserId = isHelper ? riderUser.getId() : helper.getId();
+        String destination = "/queue/helprequest/" + request.getId();
+        Double distance = calculateDistance(helper, riderUser);
 
-        messagingTemplate.convertAndSend(
-                "/topic/helprequest/" + request.getId(),
-                dto
-        );
+        messagingTemplate.convertAndSendToUser(updatedUserId.toString(), destination,
+                new LocationUpdateTrackingDTO(request.getId(), updatedUserId, null,
+                        updatedUser.getLatitude(), updatedUser.getLongitude(), distance, request.getStatus()));
+        messagingTemplate.convertAndSendToUser(otherUserId.toString(), destination,
+                new LocationUpdateTrackingDTO(request.getId(), updatedUserId, getAddress(updatedUser),
+                        updatedUser.getLatitude(), updatedUser.getLongitude(), distance, request.getStatus()));
     }
 
     @Transactional

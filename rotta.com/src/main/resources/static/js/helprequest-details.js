@@ -11,6 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const riderUserId = Number(container.dataset.riderUserId);
 
+    const otherUserId = container.dataset.isHelper === "true" ? riderUserId : helperId;
+    const otherAddress = document.getElementById("otherAddress");
+    const updateMarker = initializeTrackingMap(otherUserId);
+
+    updateMarker(helperId, container.dataset.helperLatitude, container.dataset.helperLongitude);
+    updateMarker(riderUserId, container.dataset.riderLatitude, container.dataset.riderLongitude);
+
     const status = document.getElementById("connectionStatus");
 
     const arrivedButton = document.getElementById("arrivedButton");
@@ -64,33 +71,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const userId = Number(data.userId);
 
-        // Atualização do Helper
-        if (userId === helperId) {
+        if (userId !== helperId && userId !== riderUserId) return;
 
-            if (data.userName) {
-                document.getElementById("helperName")
-                    .textContent = data.userName;
-            }
-
-            if (data.address) {
-                document.getElementById("helperAddress")
-                    .textContent = data.address;
-            }
-
-        }
-
-        // Atualização do Rider
-        else if (userId === riderUserId) {
-
-            if (data.userName) {
-                document.getElementById("riderName")
-                    .textContent = data.userName;
-            }
-
-            if (data.address) {
-                document.getElementById("riderAddress")
-                    .textContent = data.address;
-            }
+        updateMarker(userId, data.latitude, data.longitude);
+        if (userId === otherUserId) {
+            otherAddress.textContent = data.address ?? "Localização indisponível";
         }
 
         if (data.status) requestStatus = data.status;
@@ -128,3 +113,69 @@ document.addEventListener("DOMContentLoaded", () => {
     registerTracking();
 
 });
+
+function initializeTrackingMap(otherUserId) {
+    const mapElement = document.getElementById("trackingMap");
+    const mapStatus = document.getElementById("trackingMapStatus");
+    const fitButton = document.getElementById("fitTrackingMap");
+    const otherLabel = document.getElementById("otherMapLabel").textContent;
+    const leaflet = window.L;
+    if (!leaflet) {
+        mapStatus.textContent = "Mapa indisponível.";
+        return () => {};
+    }
+
+    const map = leaflet.map(mapElement, { maxZoom: 19 });
+    leaflet.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    const markers = new Map();
+
+    function fitMap() {
+        const bounds = leaflet.latLngBounds(Array.from(markers.values(), marker => marker.getLatLng()));
+        if (bounds.isValid()) map.fitBounds(bounds, { padding: [35, 35], maxZoom: 16 });
+    }
+
+    fitButton.addEventListener("click", fitMap);
+
+    return (userId, latitude, longitude) => {
+        const position = [latitude, longitude].map(value =>
+            value == null || value === "" ? NaN : Number(value));
+        const marker = markers.get(userId);
+
+        if (!position.every(Number.isFinite) || Math.abs(position[0]) > 90 || Math.abs(position[1]) > 180) {
+            if (marker) {
+                marker.remove();
+                markers.delete(userId);
+            }
+        } else if (marker) {
+            marker.setLatLng(position);
+        } else {
+            const isOther = userId === otherUserId;
+            const label = isOther ? otherLabel : "Você";
+            const icon = leaflet.divIcon({
+                className: isOther ? "tracking-pin tracking-map-other" : "tracking-pin tracking-map-self",
+                html: isOther ? "P" : "V",
+                iconSize: [26, 26],
+                iconAnchor: [13, 13]
+            });
+            const tooltip = document.createElement("span");
+            tooltip.textContent = label;
+
+            mapElement.hidden = false;
+            map.invalidateSize();
+            markers.set(userId, leaflet.marker(position, { icon, title: label, alt: label })
+                .addTo(map)
+                .bindTooltip(tooltip, { permanent: true, direction: isOther ? "right" : "left", offset: [isOther ? 14 : -14, 0] }));
+            fitMap();
+        }
+
+        mapElement.hidden = fitButton.hidden = markers.size === 0;
+        mapStatus.hidden = markers.size === 2;
+        const missingLabel = markers.has(otherUserId) ? "a sua localização" : "a localização de quem está com você na solicitação";
+        const message = markers.size === 0 ? "Aguardando localização dos participantes." : "Aguardando " + missingLabel + ".";
+        if (mapStatus.textContent !== message) mapStatus.textContent = message;
+    };
+}

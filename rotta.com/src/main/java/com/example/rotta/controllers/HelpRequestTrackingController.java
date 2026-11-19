@@ -73,7 +73,7 @@ public class HelpRequestTrackingController {
         }
 
         HelpRequestTrackingDTO tracking
-                = trackingService.getTracking(id);
+                = trackingService.getTracking(id, isHelper);
 
         model.addAttribute("tracking", tracking);
         model.addAttribute("isHelper", isHelper);
